@@ -1,0 +1,2763 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Asesmen Akhir Semester (AAS) PJOK Kela</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-blue-600 text-white rounded-lg shadow-md shadow-blue-100">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Ujian Online AAJ PJOK</h1>
+                    <p class="text-xs text-slate-500">SD Negeri - Tahun Pelajaran 2025/2026</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Tombol Panel Guru -->
+                <button id="adminPanelBtn" onclick="promptAdminAccess()" class="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                    <span>Panel Guru</span>
+                </button>
+
+                <div id="userInfoHeader" class="hidden flex items-center space-x-3 text-sm">
+                    <div class="text-right hidden sm:block">
+                        <p id="headerStudentName" class="font-semibold text-slate-800"></p>
+                        <p id="headerStudentClass" class="text-xs text-slate-500"></p>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- SECTION 1: LOGIN / REGISTER -->
+        <section id="loginSection" class="max-w-md mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8 my-8">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-extrabold text-slate-900">Identitas Peserta Ujian</h2>
+                <p class="text-slate-500 text-sm mt-2">Silakan isi data diri Anda secara lengkap sebelum memulai ujian Asesmen Akhir Jenjang.</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" for="inputName">Nama Lengkap</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </span>
+                        <input type="text" id="inputName" required class="pl-10 w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all" placeholder="Masukkan nama lengkap Anda">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" for="inputClass">Kelas</label>
+                        <select id="inputClass" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+                            <option value="6A">6 A</option>
+                            <option value="6B">6 B</option>
+                            <option value="6C">6 C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" for="inputPackage">Paket Soal</label>
+                        <select id="inputPackage" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+                            <option value="A">Paket A (40 Soal)</option>
+                            <option value="B">Paket B (40 Soal)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-blue-100 flex items-center justify-center space-x-2 transition-all">
+                        <span>Masuk Ujian</span>
+                        <i data-lucide="play" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </form>
+            
+            <div class="mt-6 pt-6 border-t border-slate-100 text-xs text-slate-400 space-y-2">
+                <p class="flex items-center"><i data-lucide="info" class="w-3.5 h-3.5 mr-1.5 flex-shrink-0"></i> Ujian terdiri dari 40 soal dengan batas waktu 60 menit.</p>
+                <p class="flex items-center"><i data-lucide="refresh-cw" class="w-3.5 h-3.5 mr-1.5 flex-shrink-0"></i> Jika keluar tidak sengaja, Anda bisa melanjutkan kembali.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 1B: SESSION DETECTION / RECOVERY SCREEN -->
+        <section id="recoverySection" class="hidden max-w-md mx-auto bg-white rounded-2xl shadow-md border border-amber-200 p-8 my-8 space-y-6">
+            <div class="text-center">
+                <div class="inline-flex p-3 bg-amber-50 text-amber-600 rounded-full mb-3">
+                    <i data-lucide="alert-circle" class="w-10 h-10 animate-pulse"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">Sesi Ujian Terdeteksi!</h3>
+                <p class="text-slate-500 text-sm mt-2">
+                    Sistem mendeteksi bahwa <b class="text-slate-800" id="recoveryName">Siswa</b> (<span id="recoveryClass">6A</span>) sedang atau telah mengikuti ujian <b class="text-slate-800" id="recoveryPackage">Paket A</b>.
+                </p>
+            </div>
+
+            <div class="bg-amber-50/50 rounded-xl p-4 border border-amber-100 text-xs text-slate-600 space-y-2">
+                <p class="flex justify-between"><span>Sisa Waktu Terakhir:</span> <b id="recoveryTime">00:00</b></p>
+                <p class="flex justify-between"><span>Soal Terjawab:</span> <b id="recoveryAnswered">0 dari 40</b></p>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="resumeExamSession()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-blue-100 flex items-center justify-center space-x-2 transition-all">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    <span>Lanjutkan Ujian (Sesuai Sisa Waktu)</span>
+                </button>
+                
+                <button id="requestResetBtn" onclick="requestResetFromLogin()" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 font-bold py-3 px-4 rounded-xl flex items-center justify-center space-x-2 transition-all">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                    <span>Minta Reset ke Guru (Mulai Ulang)</span>
+                </button>
+            </div>
+
+            <div class="text-center">
+                <button onclick="cancelRecovery()" class="text-xs text-slate-400 hover:text-slate-600 font-medium underline">Gunakan Nama Lain</button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: EXAM INTERFACE -->
+        <section id="examSection" class="hidden grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Left Side: Questions and controls -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- Status/Timer Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 flex flex-wrap gap-4 items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <span id="badgePaket" class="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full uppercase border border-indigo-100">Paket A</span>
+                        <span class="text-slate-400 text-sm">|</span>
+                        <span id="currentQuestionIndicator" class="text-sm font-medium text-slate-600">Soal <b class="text-slate-950" id="currentNum">1</b> dari 40</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-rose-600 bg-rose-50 px-4 py-2 rounded-xl border border-rose-100 font-mono font-bold">
+                        <i data-lucide="clock" class="w-4 h-4 animate-pulse"></i>
+                        <span id="timerDisplay">60:00</span>
+                    </div>
+                </div>
+
+                <!-- Main Question Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 space-y-6">
+                    <!-- Soal Label & Type -->
+                    <div class="flex items-center justify-between">
+                        <span id="questionTypeLabel" class="text-xs font-bold tracking-wide uppercase px-2.5 py-1 rounded bg-slate-100 text-slate-600">Pilihan Ganda</span>
+                        <span class="text-xs font-medium text-slate-400 bg-slate-50 px-2 py-1 rounded">Level Kognitif: <span id="cognitiveLevel">L1</span></span>
+                    </div>
+
+                    <!-- Question Text -->
+                    <div class="space-y-4">
+                        <h3 id="questionText" class="text-lg font-bold text-slate-900 leading-relaxed">Pertanyaan ujian akan tampil di sini...</h3>
+                        
+                        <!-- Image Container (Conditional) -->
+                        <div id="questionImageContainer" class="hidden border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col items-center">
+                            <div class="w-48 h-48 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-800 text-sm font-bold border-2 border-dashed border-emerald-300 relative overflow-hidden" id="imagePlaceholder">
+                                <!-- Dynamic SVG / Illustration inside -->
+                            </div>
+                            <span class="text-xs text-slate-500 mt-2 font-medium" id="imageCaption">Ilustrasi Soal</span>
+                        </div>
+                    </div>
+
+                    <!-- Answer Options -->
+                    <div id="optionsContainer" class="space-y-3">
+                        <!-- Options will be generated dynamically by JavaScript -->
+                    </div>
+                    
+                    <p id="mcmaHint" class="hidden text-xs text-blue-600 font-medium flex items-center mt-2">
+                        <i data-lucide="info" class="w-3.5 h-3.5 mr-1 flex-shrink-0"></i> *Anda dapat memilih lebih dari satu jawaban yang benar untuk tipe soal ini.
+                    </p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200">
+                    <button id="prevBtn" class="flex items-center space-x-2 px-4 py-2 text-slate-600 hover:text-slate-900 font-semibold rounded-lg hover:bg-slate-100 transition-all disabled:opacity-30 disabled:pointer-events-none">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>Sebelumnya</span>
+                    </button>
+                    
+                    <button id="nextBtn" class="flex items-center space-x-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-all">
+                        <span>Berikutnya</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side: Sidebar Map Navigation -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Navigation Grid Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+                    <h4 class="text-sm font-bold text-slate-900 flex items-center justify-between">
+                        <span>Peta Navigasi Soal</span>
+                        <span class="text-xs font-normal text-slate-500"><b id="answeredCount">0</b>/40 Terjawab</span>
+                    </h4>
+                    
+                    <div class="grid grid-cols-5 gap-2 max-h-72 overflow-y-auto pr-1" id="navGrid">
+                        <!-- Buttons 1 to 40 will be loaded here -->
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs text-slate-500">
+                        <div class="flex items-center"><span class="w-3 h-3 rounded bg-blue-600 mr-2 inline-block"></span> Terjawab</div>
+                        <div class="flex items-center"><span class="w-3 h-3 rounded bg-white border border-slate-300 mr-2 inline-block"></span> Belum Diisi</div>
+                        <div class="flex items-center"><span class="w-3 h-3 rounded ring-2 ring-blue-500 bg-slate-100 mr-2 inline-block"></span> Sedang Aktif</div>
+                    </div>
+                </div>
+
+                <!-- Submit Exam Button -->
+                <button id="finishBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-4 rounded-2xl shadow-lg shadow-emerald-100 flex items-center justify-center space-x-2 transition-all">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    <span>Selesaikan & Kumpulkan</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 3: RESULT DASHBOARD -->
+        <section id="resultSection" class="hidden space-y-8">
+            <!-- Summary Score Card -->
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-10 text-center max-w-3xl mx-auto space-y-6">
+                <div class="inline-flex p-4 bg-emerald-50 text-emerald-600 rounded-full mb-2">
+                    <i data-lucide="check-check" class="w-12 h-12"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900">Ujian Selesai!</h2>
+                    <p class="text-slate-500 mt-2">Terima kasih <span id="resStudentName" class="font-bold text-slate-800">Nama</span> (<span id="resStudentClass">6A</span>) telah menyelesaikan Asesmen Akhir Jenjang PJOK.</p>
+                </div>
+
+                <!-- Score Badges -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Skor Ujian</p>
+                        <p class="text-3xl font-black text-blue-600 mt-1" id="resScore">0</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Benar</p>
+                        <p class="text-3xl font-black text-emerald-600 mt-1" id="resCorrect">0</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Salah</p>
+                        <p class="text-3xl font-black text-rose-500 mt-1" id="resWrong">0</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Waktu Sisa</p>
+                        <p class="text-3xl font-black text-amber-600 mt-1 font-mono" id="resTime">00:00</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-center space-x-4 pt-4">
+                    <button id="restartBtn" class="px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition-all flex items-center space-x-2">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        <span>Ulangi Ujian / Paket Lain</span>
+                    </button>
+                    <a href="#analysisArea" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all flex items-center space-x-2">
+                        <i data-lucide="file-search" class="w-4 h-4"></i>
+                        <span>Lihat Pembahasan Lengkap</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Detailed Question Analysis Area -->
+            <div id="analysisArea" class="space-y-6 max-w-5xl mx-auto pt-4">
+                <div class="border-b border-slate-200 pb-4">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+                        <i data-lucide="list-collapse" class="text-blue-600"></i>
+                        <span>Analisis Pembahasan & Koreksi Soal</span>
+                    </h3>
+                    <p class="text-slate-500 text-sm mt-1">Gunakan evaluasi di bawah ini untuk mempelajari letak kesalahan Anda secara mendalam beserta penjelasannya.</p>
+                </div>
+
+                <div id="analysisCardsContainer" class="space-y-6">
+                    <!-- Dynamic comparison analysis generated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: GURU / ADMIN DASHBOARD -->
+        <section id="adminSection" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8 space-y-6">
+                <!-- Header Admin -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-6">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900 flex items-center space-x-2">
+                            <i data-lucide="settings" class="text-blue-600 w-7 h-7"></i>
+                            <span>Panel Administrasi Guru / Wali Kelas</span>
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">Pantau siswa aktif dan kelola hasil nilai pengerjaan ujian.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="exportResultsCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center space-x-1.5 shadow-md shadow-emerald-100 transition-all">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            <span>Ekspor Excel/CSV</span>
+                        </button>
+                        <button onclick="confirmClearAllRecords()" class="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl border border-rose-200 flex items-center space-x-1.5 transition-all">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            <span>Kosongkan Semua</span>
+                        </button>
+                        <button onclick="closeAdminPanel()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center space-x-1.5 transition-all">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                            <span>Keluar Panel</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Admin Tab Menu -->
+                <div class="flex border-b border-slate-200">
+                    <button id="tabMonitoringBtn" onclick="switchAdminTab('monitoring')" class="px-6 py-3 text-sm font-bold border-b-2 border-blue-600 text-blue-600 flex items-center space-x-2">
+                        <i data-lucide="activity" class="w-4 h-4"></i>
+                        <span>Siswa Aktif (Monitoring)</span>
+                        <span id="activeBadgeCount" class="bg-rose-500 text-white px-2 py-0.5 text-[10px] rounded-full hidden">0</span>
+                    </button>
+                    <button id="tabResultsBtn" onclick="switchAdminTab('results')" class="px-6 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-2">
+                        <i data-lucide="award" class="w-4 h-4"></i>
+                        <span>Hasil Nilai (Selesai)</span>
+                    </button>
+                </div>
+
+                <!-- TAB 1: MONITORING SISWA AKTIF -->
+                <div id="tabMonitoringContent" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center space-x-4">
+                            <div class="p-3 bg-blue-100 text-blue-700 rounded-xl">
+                                <i data-lucide="users" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-semibold uppercase">Sedang Mengerjakan</p>
+                                <p class="text-2xl font-extrabold text-slate-900" id="liveActiveCount">0</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center space-x-4">
+                            <div class="p-3 bg-amber-100 text-amber-700 rounded-xl">
+                                <i data-lucide="wifi-off" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-semibold uppercase">Terputus / Keluar</p>
+                                <p class="text-2xl font-extrabold text-slate-900" id="liveDisconnectedCount">0</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center space-x-4">
+                            <div class="p-3 bg-rose-100 text-rose-700 rounded-xl">
+                                <i data-lucide="help-circle" class="w-6 h-6 animate-bounce"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-semibold uppercase">Butuh Reset Sesi</p>
+                                <p class="text-2xl font-extrabold text-slate-900 text-rose-600" id="liveResetRequestCount">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Active Students Table -->
+                    <div class="overflow-x-auto border border-slate-200 rounded-2xl bg-white">
+                        <table class="min-w-full divide-y divide-slate-200 text-left">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Nama</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Kelas</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Paket</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Progres Pengerjaan</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Sisa Waktu</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Koneksi / Status</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Aksi Penyelamatan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monitoringTableBody" class="divide-y divide-slate-100">
+                                <!-- Generated dynamically -->
+                            </tbody>
+                        </table>
+                        <div id="noMonitoringData" class="hidden p-8 text-center text-slate-400 text-sm space-y-2">
+                            <i data-lucide="users" class="w-12 h-12 mx-auto text-slate-300"></i>
+                            <p>Tidak ada siswa yang aktif mengikuti ujian saat ini.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: DAFTAR NILAI SELESAI -->
+                <div id="tabResultsContent" class="hidden space-y-6">
+                    <div class="overflow-x-auto border border-slate-200 rounded-2xl bg-white">
+                        <table class="min-w-full divide-y divide-slate-200 text-left">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">No</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Peserta</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Kelas</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Paket</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Benar / Salah</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Nilai / Skor</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Waktu Selesai</th>
+                                    <th class="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody" class="divide-y divide-slate-100">
+                                <!-- Rows generated by JS -->
+                            </tbody>
+                        </table>
+                        <div id="noAdminData" class="hidden p-8 text-center text-slate-400 text-sm space-y-2">
+                            <i data-lucide="folder-open" class="w-12 h-12 mx-auto text-slate-300"></i>
+                            <p>Belum ada riwayat siswa yang menyelesaikan ujian.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Evaluasi Hasil Siswa Khusus -->
+            <div id="adminStudentDetailContainer" class="hidden bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Rincian Hasil Evaluasi: <span id="detailStudentName" class="text-blue-600">Siswa</span></h3>
+                        <p class="text-xs text-slate-500">Menganalisis lembar pengerjaan siswa secara satu-persatu.</p>
+                    </div>
+                    <button onclick="closeStudentDetail()" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-100 px-3 py-1.5 rounded-lg">Tutup Rincian</button>
+                </div>
+                <div id="adminDetailCards" class="space-y-4">
+                    <!-- Dynamic comparison analysis for selected student -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>&copy; 2026 Aplikasi Ujian PJOK Kelas 6 SD. Berbasis Kisi-Kisi Asesmen Akhir Jenjang (AAJ) 2025/2026.</p>
+        </div>
+    </footer>
+
+    <!-- Confirm Dialog Custom (Alternative to alert) -->
+    <div id="confirmDialog" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 space-y-4">
+            <div class="flex items-center space-x-3 text-amber-600">
+                <div class="p-2 bg-amber-50 rounded-lg">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-lg font-bold text-slate-900" id="dialogTitle">Konfirmasi Kumpulkan</h4>
+            </div>
+            <p class="text-slate-600 text-sm" id="dialogText">Apakah Anda yakin ingin menyelesaikan ujian sekarang? Periksa kembali seluruh jawaban Anda.</p>
+            <div class="flex justify-end space-x-3 pt-2">
+                <button id="cancelDialogBtn" class="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-all">Periksa Kembali</button>
+                <button id="confirmDialogBtn" class="px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-all">Ya, Kumpulkan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal for Admin (Custom Dialog) -->
+    <div id="adminPasswordModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl border border-slate-200 space-y-4">
+            <div class="flex items-center space-x-3 text-blue-600">
+                <div class="p-2 bg-blue-50 rounded-lg">
+                    <i data-lucide="lock" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-lg font-bold text-slate-900">Keamanan Guru/Admin</h4>
+            </div>
+            <p class="text-slate-500 text-xs">Masukkan kata sandi khusus guru untuk melihat daftar hasil nilai dan analisis kelas.</p>
+            <div>
+                <input type="password" id="adminPasswordInput" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-center text-lg tracking-widest" placeholder="••••••••">
+                <p id="adminPasswordError" class="hidden text-rose-500 text-xs mt-1.5 font-semibold text-center">Kata sandi salah!</p>
+            </div>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button onclick="closeAdminPasswordModal()" class="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-all">Batal</button>
+                <button onclick="submitAdminPassword()" class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-all">Masuk</button>
+            </div>
+            <div class="text-[10px] text-slate-400 text-center">Kata Sandi Default: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700">adminpjok</code></div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DATA & LOGIC -->
+    <script>
+        // Database Soal - Paket A & Paket B (Total 2 x 40 Soal = 80 Soal PJOK Unik sesuai Kisi-Kisi)
+        const examData = {
+            A: [
+                // === KISI 1 s/d 5: SENAM LANTAI (No 1-5) ===
+                {
+                    id: 1,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "PG",
+                    question: "Gerakan dalam senam lantai yang dilakukan dengan cara memutarkan badan ke depan secara membulat, di mana posisi tengkuk menyentuh matras terlebih dahulu dinamakan...",
+                    options: [
+                        { key: "A", text: "Guling Belakang (Back Roll)" },
+                        { key: "B", text: "Guling Depan (Forward Roll)" },
+                        { key: "C", text: "Kayang" },
+                        { key: "D", text: "Handstand" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Guling depan (forward roll) adalah gerakan menggulingkan atau menggelindingkan badan ke depan secara membulat dengan urutan menyentuh matras mulai dari tengkuk, punggung, pinggang, hingga panggul bagian belakang."
+                },
+                {
+                    id: 2,
+                    topic: "Senam Lantai",
+                    level: "L2",
+                    type: "PG",
+                    question: "Dalam melakukan gerakan guling belakang (back roll) yang benar, urutan bagian tubuh pertama kali yang harus menyentuh matras setelah pantat mendarat adalah...",
+                    options: [
+                        { key: "A", text: "Kepala bagian atas" },
+                        { key: "B", text: "Punggung dan tengkuk" },
+                        { key: "C", text: "Tangan yang menumpu" },
+                        { key: "D", text: "Kedua lutut kaki" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Saat melakukan guling belakang, setelah pantat menyentuh matras, urutan bagian tubuh berikutnya yang mendarat secara berurutan adalah punggung bagian bawah hingga atas, lalu pundak/tengkuk, disusul tolakan tangan."
+                },
+                {
+                    id: 3,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "PG",
+                    question: "Suatu gerakan berdiri tegak lurus dengan posisi tubuh terbalik menggunakan kekuatan tumpuan pada kedua telapak tangan dinamakan...",
+                    options: [
+                        { key: "A", text: "Headstand" },
+                        { key: "B", text: "Kayang" },
+                        { key: "C", text: "Handstand" },
+                        { key: "D", text: "Sikap Lilin" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Handstand adalah sikap berdiri dengan bertumpu pada kedua tangan secara tegak lurus ke atas dengan kaki lurus, mengandalkan keseimbangan dan kekuatan otot lengan serta perut."
+                },
+                {
+                    id: 4,
+                    topic: "Senam Lantai",
+                    level: "L2",
+                    type: "PG",
+                    question: "Gerakan merengangkan badan dengan bertumpu pada kedua tangan dan kaki dengan posisi dada dan perut menghadap ke atas membentuk busur dinamakan...",
+                    options: [
+                        { key: "A", text: "Sikap Lilin" },
+                        { key: "B", text: "Guling Lenting" },
+                        { key: "C", text: "Kayang" },
+                        { key: "D", text: "Handstand" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Kayang adalah posisi tubuh meregang membentuk busur menghadap ke atas yang ditumpu oleh kedua tangan dan kaki. Gerakan ini melatih kelenturan otot perut, punggung, dan bahu."
+                },
+                {
+                    id: 5,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "PG",
+                    question: "Berikut ini yang merupakan contoh dari pola gerak dominan dalam aktivitas senam lantai adalah...",
+                    options: [
+                        { key: "A", text: "Berlari, menendang, dan menyundul bola" },
+                        { key: "B", text: "Bertumpu, melayang, dan mendarat" },
+                        { key: "C", text: "Memukul, menangkap, dan melempar" },
+                        { key: "D", text: "Melompat tinggi, start jongkok, dan lari cepat" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Pola gerak dominan (PGD) senam lantai terdiri dari bertumpu, bergantung, keseimbangan, lokomotor, tolakan, putaran, ayunan, melayang, dan mendarat."
+                },
+                // === KISI 6 s/d 10: GERAK BERIRAMA (No 6-10) ===
+                {
+                    id: 6,
+                    topic: "Gerak Berirama",
+                    level: "L2",
+                    type: "PG",
+                    question: "Pada aktivitas gerak berirama, apabila kaki kiri melangkah ke depan, maka koordinasi gerakan ayunan lengan yang tepat adalah...",
+                    options: [
+                        { key: "A", text: "Lengan kanan diayunkan ke depan" },
+                        { key: "B", text: "Lengan kiri diayunkan ke depan" },
+                        { key: "C", text: "Kedua lengan sejajar ke samping kiri" },
+                        { key: "D", text: "Kedua lengan diputar di belakang tubuh" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Untuk menjaga keseimbangan tubuh (koordinasi silang), ayunan lengan kanan ke depan dilakukan secara berlawanan dengan langkah kaki kiri ke depan."
+                },
+                {
+                    id: 7,
+                    topic: "Gerak Berirama",
+                    level: "L1",
+                    type: "PG",
+                    question: "Tujuan utama dan manfaat paling penting dari melakukan aktivitas gerak berirama (senam irama) secara teratur bagi kesehatan tubuh kita adalah...",
+                    options: [
+                        { key: "A", text: "Meningkatkan daya tahan jantung dan paru-paru serta koordinasi tubuh" },
+                        { key: "B", text: "Melatih kekuatan otot untuk mengangkat beban yang sangat berat" },
+                        { key: "C", text: "Membentuk tubuh agar terlihat sangat kekar" },
+                        { key: "D", text: "Mengurangi kecepatan reaksi otot kaki" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Gerak berirama tergolong sebagai latihan aerobik yang sangat baik untuk melatih kapasitas kardiorespiratori (jantung-paru), kelenturan tubuh, serta koordinasi antar anggota gerak."
+                },
+                {
+                    id: 8,
+                    topic: "Gerak Berirama",
+                    level: "L1",
+                    type: "PG",
+                    question: "Aktivitas fisik di bawah ini yang paling efektif digunakan untuk melatih sinkronisasi koordinasi mata, tangan, dan kaki secara bersamaan adalah...",
+                    options: [
+                        { key: "A", text: "Angkat beban (weightlifting)" },
+                        { key: "B", text: "Lari maraton jarak jauh" },
+                        { key: "C", text: "Senam irama dengan kombinasi musik cepat" },
+                        { key: "D", text: "Push up statis" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Senam irama menuntut tubuh menyelaraskan ketukan musik (pendengaran) dengan gerakan tangan dan kaki secara kontinu, menjadikannya aktivitas terbaik untuk melatih koordinasi dinamis."
+                },
+                {
+                    id: 9,
+                    topic: "Gerak Berirama",
+                    level: "L3",
+                    type: "PG",
+                    question: "Perhatikan langkah-langkah acak gerakan langkah biasa (looppas) berikut ini:<br>1) Berdiri tegak, kedua tangan di samping badan.<br>2) Hitungan satu, langkahkan kaki kiri ke depan.<br>3) Hitungan dua, langkahkan kaki kanan menyusul ke depan.<br>4) Setiap langkah disertai ayunan lengan yang relaks.<br>Urutan melakukan gerakan langkah biasa yang paling runtut dan benar adalah...",
+                    options: [
+                        { key: "A", text: "1) - 2) - 4) - 3)" },
+                        { key: "B", text: "2) - 3) - 1) - 4)" },
+                        { key: "C", text: "1) - 2) - 3) - 4)" },
+                        { key: "D", text: "3) - 1) - 2) - 4)" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Urutan logis dimulai dari posisi awal berdiri tegak (1), kemudian langkah pertama di hitungan satu (2), dilanjutkan langkah kedua di hitungan dua (3), serta diiringi ayunan lengan penyeimbang (4)."
+                },
+                {
+                    id: 10,
+                    topic: "Gerak Berirama",
+                    level: "L1",
+                    type: "PG",
+                    question: "Sikap awal tubuh yang benar sebelum memulai langkah biasa pada gerak berirama senam aerobik adalah...",
+                    options: [
+                        { key: "A", text: "Berdiri tegak dengan kaki rapat dan pandangan lurus ke depan" },
+                        { key: "B", text: "Membungkuk 45 derajat" },
+                        { key: "C", text: "Posisi jongkok santai" },
+                        { key: "D", text: "Tengkurap di atas lantai" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Sikap permulaan hampir semua gerak berirama adalah berdiri tegak (posisi anastomi) dengan kaki sejajar dan pandangan mengarah ke depan agar tubuh dalam keadaan siap berkoordinasi."
+                },
+                // === KISI 11 s/d 15: AKTIVITAS AIR (No 11-15) ===
+                {
+                    id: 11,
+                    topic: "Aktivitas Air",
+                    level: "L1",
+                    type: "PG",
+                    question: "Tujuan paling mendasar dari dilakukannya gerakan pemanasan terlebih dahulu sebelum menceburkan diri dan berenang di dalam kolam renang adalah...",
+                    options: [
+                        { key: "A", text: "Agar pakaian renang tidak mudah robek saat basah" },
+                        { key: "B", text: "Menghindari kram otot, menyesuaikan suhu tubuh, serta mencegah cedera" },
+                        { key: "C", text: "Mempercepat daya apung tubuh secara instan" },
+                        { key: "D", text: "Memastikan air kolam dalam kondisi jernih" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Pemanasan melancarkan aliran darah ke otot, meregangkan persendian, dan menaikkan suhu tubuh sehingga siap beradaptasi di air dingin kolam renang untuk meminimalisir kram otot perut/kaki."
+                },
+                {
+                    id: 12,
+                    topic: "Aktivitas Air",
+                    level: "L1",
+                    type: "PG",
+                    question: "Gaya renang yang gerakan kakinya ditekuk lalu menendang/melecut ke arah luar menyerupai gerakan kaki katak saat berenang dinamakan gaya...",
+                    options: [
+                        { key: "A", text: "Gaya Bebas (Crawl)" },
+                        { key: "B", text: "Gaya Punggung (Backstroke)" },
+                        { key: "C", text: "Gaya Dada (Breaststroke)" },
+                        { key: "D", text: "Gaya Kupu-Kupu (Butterfly)" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Gaya dada sering disebut gaya katak karena koordinasi dorongan tungkai kaki menekuk, menendang melingkar ke luar, dan merapat persis seperti lompatan katak dalam air."
+                },
+                {
+                    id: 13,
+                    topic: "Aktivitas Air",
+                    level: "L2",
+                    type: "PG",
+                    question: "Posisi tubuh yang paling aerodinamis (streamline) dan benar saat melakukan gerakan meluncur di permukaan air kolam renang adalah...",
+                    options: [
+                        { key: "A", text: "Kepala tegak mendongak dengan punggung melengkung ke bawah" },
+                        { key: "B", text: "Badan sejajar permukaan air, lengan lurus menjepit telinga, dan kaki lurus rapat" },
+                        { key: "C", text: "Tangan memegang lutut dengan punggung membungkuk" },
+                        { key: "D", text: "Kaki dibuka lebar-lebar dengan tangan menyilang di dada" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Streamline (sejajar air dengan tangan lurus ke depan merapat menjepit telinga dan kaki lurus ke belakang) berfungsi meminimalkan gaya hambat air (drag) sehingga tubuh meluncur jauh."
+                },
+                {
+                    id: 14,
+                    topic: "Aktivitas Air",
+                    level: "L2",
+                    type: "PG",
+                    question: "Berikut ini tindakan nyata yang mencerminkan kepatuhan terhadap aturan keselamatan diri dan orang lain di lingkungan kolam renang adalah...",
+                    options: [
+                        { key: "A", text: "Berlari kencang di tepi kolam yang basah dan licin" },
+                        { key: "B", text: "Mendorong teman dari belakang agar masuk ke air secara mendadak" },
+                        { key: "C", text: "Tidak bercanda berlebihan dan menggunakan kedalaman kolam yang sesuai tinggi badan" },
+                        { key: "D", text: "Berenang sendirian di kolam dalam tanpa adanya pengawasan petugas" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Menggunakan area kolam yang kedalamannya sesuai tinggi badan dan bersikap tertib menghindari kecelakaan fatal seperti tenggelam atau tergelincir di lantai pinggiran kolam."
+                },
+                {
+                    id: 15,
+                    topic: "Aktivitas Air",
+                    level: "L1",
+                    type: "PG",
+                    question: "Alat bantu berenang berupa papan tipis berpori yang dirancang mengapung, biasanya digenggam oleh pemula untuk melatih gerakan tungkai kaki di air dinamakan...",
+                    options: [
+                        { key: "A", text: "Kacamata renang" },
+                        { key: "B", text: "Kaki katak (fins)" },
+                        { key: "C", text: "Papan luncur (kickboard)" },
+                        { key: "D", text: "Pemberat kaki" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Papan luncur (kickboard) adalah alat bantu berbahan busa sintetis yang mengapung tinggi di air untuk menyokong tubuh bagian atas sementara kaki bebas melatih tendangan."
+                },
+                // === KISI 16 s/d 20: KEBUGARAN JASMANI (No 16-20) ===
+                {
+                    id: 16,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Kesanggupan dan kemampuan tubuh untuk melakukan penyesuaian terhadap pembebanan fisik yang diberikan kepadanya (bekerja sehari-hari) tanpa menimbulkan kelelahan berlebih dinamakan...",
+                    options: [
+                        { key: "A", text: "Daya tahan kardiovaskular" },
+                        { key: "B", text: "Kebugaran Jasmani" },
+                        { key: "C", text: "Kekuatan Otot" },
+                        { key: "D", text: "Kelenturan Persendian" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Definisi baku kebugaran jasmani (physical fitness) adalah kapasitas tubuh beraktivitas produktif sehari-hari tanpa merasa kelelahan yang berarti dan masih memiliki cadangan energi."
+                },
+                {
+                    id: 17,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Latihan lari bolak-balik dengan mengubah arah secara cepat melewati rintangan (shuttle run) bertujuan untuk mengukur dan meningkatkan...",
+                    options: [
+                        { key: "A", text: "Kelenturan (flexibility)" },
+                        { key: "B", text: "Daya tahan paru (endurance)" },
+                        { key: "C", text: "Kelincahan (agility)" },
+                        { key: "D", text: "Kekuatan murni (strength)" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Lari bolak-balik (shuttle run) melatih kemampuan mengubah arah tubuh secara cepat tanpa kehilangan keseimbangan, yang merupakan definisi utama dari kelincahan (agility)."
+                },
+                {
+                    id: 18,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Perlengkapan utama yang mutlak harus dipersiapkan sebelum melakukan tes kebugaran berupa angkat tubuh (pull-up) untuk siswa putra adalah...",
+                    options: [
+                        { key: "A", text: "Matras tipis lantai" },
+                        { key: "B", text: "Palang tunggal yang kokoh" },
+                        { key: "C", text: "Tali skipping elastis" },
+                        { key: "D", text: "Cone plastik pembatas" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Pull-up dilakukan dengan cara bergantung dan menarik berat badan ke atas melewati palang horizontal, sehingga membutuhkan palang tunggal (pull-up bar) sebagai tumpuan genggaman tangan."
+                },
+                {
+                    id: 19,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Berikut ini adalah aktivitas fisik sehari-hari yang memberikan pengaruh positif langsung pada pemeliharaan tingkat kebugaran jasmani adalah...",
+                    options: [
+                        { key: "A", text: "Menonton televisi berjam-jam sambil ngemil" },
+                        { key: "B", text: "Bermain game online di ponsel sambil berbaring" },
+                        { key: "C", text: "Berjalan kaki ke sekolah secara rutin dan senam pagi" },
+                        { key: "D", text: "Tidur siang terlalu lama setelah makan kenyang" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Aktivitas aktif bergerak seperti berjalan kaki secara rutin meningkatkan denyut jantung harian yang berdampak menyehatkan fungsi pembuluh darah dan organ pernapasan."
+                },
+                {
+                    id: 20,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Bentuk tes fisik kebugaran jasmani yang bertujuan untuk mengukur tingkat kekuatan dan daya tahan otot lengan serta bahu adalah...",
+                    options: [
+                        { key: "A", text: "Lari cepat 60 meter (sprint)" },
+                        { key: "B", text: "Push-up atau pull-up secara berulang" },
+                        { key: "C", text: "Loncat tegak tanpa awalan (vertical jump)" },
+                        { key: "D", text: "Lari multi-tahap (bleep test)" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Push-up dan pull-up memfokuskan kontraksi berulang pada otot lengan atas (triceps, biceps) serta otot bahu (deltoid) untuk mendorong atau menarik beban tubuh."
+                },
+                // === KISI 21 s/d 25: BAHAYA NARKOBA & ROKOK (No 21-25) ===
+                {
+                    id: 21,
+                    topic: "Bahaya Narkoba",
+                    level: "L2",
+                    type: "PG",
+                    question: "Salah satu dampak psikis (perilaku dan kejiwaan) yang sangat menonjol terlihat pada diri seorang pengguna aktif penyalahgunaan narkoba adalah...",
+                    options: [
+                        { key: "A", text: "Tubuh menjadi semakin kekar dan kuat" },
+                        { key: "B", text: "Menjadi sangat tertutup, mudah emosi/marah, dan sering berbohong" },
+                        { key: "C", text: "Nafsu makan bertambah berkali-kali lipat" },
+                        { key: "D", text: "Konsentrasi belajar meningkat pesat" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Dampak psikis penyalahgunaan narkoba menyerang sistem saraf pusat yang mengubah perilaku seseorang menjadi tertutup (apatis), emosi labil/sensitif, berhalusinasi, hingga sering berbohong demi mendapatkan obat."
+                },
+                {
+                    id: 22,
+                    topic: "Bahaya Rokok",
+                    level: "L1",
+                    type: "PG",
+                    question: "Zat adiktif berbahaya di dalam daun tembakau rokok yang menyebabkan ketergantungan atau efek kecanduan bagi penghisapnya adalah...",
+                    options: [
+                        { key: "A", text: "Nikotin" },
+                        { key: "B", text: "Karbon Monoksida" },
+                        { key: "C", text: "Tar" },
+                        { key: "D", text: "Metanol" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Nikotin adalah senyawa kimia alkaloid yang merangsang saraf otak mengeluarkan dopamin secara cepat sehingga menciptakan rasa rileks sementara yang berujung pada kecanduan berat."
+                },
+                {
+                    id: 23,
+                    topic: "Bahaya Narkoba",
+                    level: "L2",
+                    type: "PG",
+                    question: "Upaya pencegahan narkoba secara 'promotif' yang dapat dilakukan di lingkungan sekolah dasar untuk melindungi siswa dari ancaman narkoba adalah...",
+                    options: [
+                        { key: "A", text: "Merehabilitasi korban narkoba di rumah sakit" },
+                        { key: "B", text: "Menangkap para bandar narkoba di jalanan" },
+                        { key: "C", text: "Melakukan sosialisasi/penyuluhan bahaya narkoba melalui poster dan seminar kesehatan" },
+                        { key: "D", text: "Mengurung pelaku penyalahgunaan narkoba di penjara" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Upaya promotif adalah tindakan pembinaan/edukasi yang mengedepankan kampanye sadar sehat dan informasi bahaya zat adiktif sebelum penyalahgunaan terjadi."
+                },
+                {
+                    id: 24,
+                    topic: "Bahaya Narkoba",
+                    level: "L1",
+                    type: "PG",
+                    question: "Jenis narkoba golongan halusinogen dapat mengakibatkan efek samping fatal bagi indera persepsi manusia berupa...",
+                    options: [
+                        { key: "A", text: "Tubuh mendadak menjadi sangat bugar" },
+                        { key: "B", text: "Mengalami halusinasi (melihat atau mendengar sesuatu yang tidak nyata)" },
+                        { key: "C", text: "Detak jantung melambat secara normal" },
+                        { key: "D", text: "Meningkatkan kemampuan daya ingat masa lalu" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Golongan halusinogen seperti LSD atau ganja dalam dosis tertentu mengacaukan transmisi sinyal saraf otak sehingga pengguna merasakan sensasi visual/audio khayalan yang sebenarnya tidak ada."
+                },
+                {
+                    id: 25,
+                    topic: "Bahaya Narkoba",
+                    level: "L2",
+                    type: "PG",
+                    question: "Zat adiktif ilegal yang diperoleh dari tanaman Cannabis sativa, di mana bentuk daunnya menjari khas dengan tepi bergerigi sering disalahgunakan dengan cara dikeringkan lalu dilinting menyerupai rokok dinamakan...",
+                    options: [
+                        { key: "A", text: "Tembakau gorila" },
+                        { key: "B", text: "Ganja" },
+                        { key: "C", text: "Kopium" },
+                        { key: "D", text: "Kokain" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Ganja berasal dari tanaman ganja (Cannabis sativa) yang daun menjari bergeriginya memiliki zat aktif THC (Tetrahydrocannabinol) pemicu halusinasi tingkat tinggi."
+                },
+                // === KISI 26 s/d 35: BENAR/SALAH (No 26-35) ===
+                {
+                    id: 26,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "BS",
+                    question: "Dalam senam lantai, gerakan berguling, kayang, and handstand tergolong ke dalam aktivitas senam artistik tanpa menggunakan bantuan alat berat.",
+                    correctAnswer: "BENAR",
+                    explanation: "Gerakan dasar senam lantai seperti guling depan/belakang, kayang, dan handstand merupakan inti dasar senam artistik lantai yang mengutamakan kelenturan, kekuatan, dan keindahan gerak tubuh di atas matras."
+                },
+                {
+                    id: 27,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "BS",
+                    question: "Urutan kontak tubuh saat melakukan guling depan yang benar diawali dengan meletakkan bagian ubub-ubun dahi kepala terlebih dahulu ke matras.",
+                    correctAnswer: "SALAH",
+                    explanation: "Urutan yang benar harus diawali dengan menempelkan tengkuk (leher belakang) ke matras dengan kepala ditekuk menempel ke dada. Menaruh dahi/dahi terlebih dahulu berisiko mencederai leher."
+                },
+                {
+                    id: 28,
+                    topic: "Senam Irama",
+                    level: "L2",
+                    type: "BS",
+                    question: "Keseimbangan statis dan dinamis sangat diperlukan dalam senam lantai karena membantu tubuh mempertahankan posisi berdiri mantap agar tidak terjatuh saat mendarat.",
+                    correctAnswer: "BENAR",
+                    explanation: "Keseimbangan adalah salah satu komponen kebugaran jasmani terpenting dalam senam lantai untuk mengunci posisi tubuh saat bertumpu (misal: handstand atau setelah melompat)."
+                },
+                {
+                    id: 29,
+                    topic: "Senam Irama",
+                    level: "L1",
+                    type: "BS",
+                    question: "Gerakan ayunan lengan pada senam irama hanya boleh dilakukan ke arah depan dan tidak boleh diayunkan ke arah samping tubuh karena merusak tempo musik.",
+                    correctAnswer: "SALAH",
+                    explanation: "Gerakan ayunan lengan pada senam irama sangat variatif, mencakup ayunan satu/dua lengan ke depan, belakang, samping kanan/kiri, bahkan gerakan melingkar mengikuti birama musik."
+                },
+                {
+                    id: 30,
+                    topic: "Aktivitas Air",
+                    level: "L1",
+                    type: "BS",
+                    question: "Melakukan peregangan otot sebelum masuk ke air bermanfaat meningkatkan elastisitas otot sehingga mengurangi risiko kram akibat perubahan suhu air kolam.",
+                    correctAnswer: "BENAR",
+                    explanation: "Peregangan otot menstimulasi cairan sinovial sendi dan memacu aliran darah mengalir lancar sehingga otot siap berkontraksi dalam rentang gerak penuh tanpa kaku."
+                },
+                {
+                    id: 31,
+                    topic: "Aktivitas Air",
+                    level: "L2",
+                    type: "BS",
+                    question: "Bercanda dengan cara saling dorong ke dalam air di pinggiran kolam yang basah adalah hal yang diperbolehkan karena dapat melatih keberanian berenang.",
+                    correctAnswer: "SALAH",
+                    explanation: "Saling dorong di tepi kolam sangat berbahaya karena permukaan lantai kolam yang licin basah rawan membuat terpeleset membentur beton pinggiran kolam atau tenggelam tak sengaja."
+                },
+                {
+                    id: 32,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "BS",
+                    question: "Pemanasan (warming up) sebelum latihan kebugaran jasmani berfungsi mempersiapkan kerja organ jantung dan paru secara bertahap menuju latihan inti.",
+                    correctAnswer: "BENAR",
+                    explanation: "Pemanasan menaikkan denyut nadi secara bertahap (gradual) agar jantung tidak mengalami lonjakan beban kerja mendadak saat masuk ke fase latihan yang berat."
+                },
+                {
+                    id: 33,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "BS",
+                    question: "Latihan naik turun tangga secara berulang-ulang dirancang khusus untuk meningkatkan kelenturan bola voli secara instan.",
+                    correctAnswer: "SALAH",
+                    explanation: "Latihan naik-turun tangga (step-up) berguna melatih kekuatan otot paha (quadriceps), betis, pantat, serta kapasitas daya tahan jantung-paru (kardiorespiratori), bukan kelenturan."
+                },
+                {
+                    id: 34,
+                    topic: "Bahaya Narkoba",
+                    level: "L1",
+                    type: "BS",
+                    question: "Lembaga resmi Republik Indonesia yang diberi mandat khusus untuk melakukan pencegahan, pemberantasan, dan penanganan penyalahgunaan narkoba adalah BNN (Badan Narkotika Nasional).",
+                    correctAnswer: "BENAR",
+                    explanation: "BNN dibentuk berdasarkan Undang-Undang No. 35 Tahun 2009 untuk menyusun dan melaksanakan kebijakan nasional mengenai P4GN (Pencegahan, Pemberantasan Penyalahgunaan dan Peredaran Gelap Narkotika)."
+                },
+                {
+                    id: 35,
+                    topic: "Bahaya Narkoba",
+                    level: "L2",
+                    type: "BS",
+                    question: "Minuman keras golongan A yang beredar di masyarakat sama sekali tidak memiliki kandungan alkohol di dalamnya.",
+                    correctAnswer: "SALAH",
+                    explanation: "Minuman keras golongan A tetap mengandung alkohol (etanol) dengan kadar rendah berkisar antara 1% sampai dengan 5% (seperti bir dan shandy)."
+                },
+                // === KISI 36 s/d 40: MULTI-CHOICE MULTI-ANSWER (No 36-40) ===
+                {
+                    id: 36,
+                    topic: "Senam Lantai",
+                    level: "L3",
+                    type: "MCMA",
+                    question: "Pilihlah langkah-langkah yang BENAR dan berurutan secara tepat dalam melakukan gerak guling depan (forward roll) dari posisi awal jongkok! (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Menaruh kedua telapak tangan pada matras selebar bahu" },
+                        { key: "B", text: "Memasukkan kepala di antara kedua lengan hingga dagu menempel ke dada" },
+                        { key: "C", text: "Mendaratkan dahi kepala terlebih dahulu ke lantai untuk mendorong tubuh" },
+                        { key: "D", text: "Menggulingkan tubuh ke depan dengan mendaratkan tengkuk terlebih dahulu ke matras" }
+                    ],
+                    correctAnswers: ["A", "B", "D"],
+                    explanation: "Langkah guling depan yang benar: menaruh telapak tangan di matras (A), melipat dagu ke dada (B), dan menggulingkan badan dengan menaruh tengkuk ke matras (D). Pilihan C keliru karena dahi tidak boleh menyentuh matras."
+                },
+                {
+                    id: 37,
+                    topic: "Gerak Berirama",
+                    level: "L2",
+                    type: "MCMA",
+                    question: "Manakah di bawah ini yang merupakan unsur-unsur esensial yang terkandung dalam definisi utuh aktivitas gerak berirama (senam irama)? (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Kombinasi gerak yang mengikuti ketukan musik atau irama" },
+                        { key: "B", text: "Kekuatan mengangkat beban besi seberat-beratnya" },
+                        { key: "C", text: "Kelenturan tubuh dan koordinasi gerak yang harmonis" },
+                        { key: "D", text: "Ketepatan gerakan dengan ketukan irama pengiring" }
+                    ],
+                    correctAnswers: ["A", "C", "D"],
+                    explanation: "Unsur pokok senam irama meliputi keselarasan musik/irama (A), kelenturan tubuh (C), ketepatan gerakan (D), kontinuitas, dan keluwesan gerak. Mengangkat besi (B) adalah latihan beban."
+                },
+                {
+                    id: 38,
+                    topic: "Aktivitas Air",
+                    level: "L2",
+                    type: "MCMA",
+                    question: "Apa sajakah alasan logis mengapa kita wajib mematuhi aturan keselamatan selama berada di area kolam renang? (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Mencegah terjadinya musibah fatal seperti tenggelam" },
+                        { key: "B", text: "Menjaga kebersihan dan higienitas air kolam renang bersama" },
+                        { key: "C", text: "Agar bisa berenang dengan kecepatan maksimum mengalahkan orang lain" },
+                        { key: "D", text: "Menghindari kecelakaan terpeleset akibat lantai pinggiran kolam yang licin" }
+                    ],
+                    correctAnswers: ["A", "B", "D"],
+                    explanation: "Aturan dibuat demi keselamatan bersama (A), mencegah lantai licin menyebabkan benturan (D), serta menjaga kebersihan kolam (B) untuk kesehatan kulit dan mata."
+                },
+                {
+                    id: 39,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "MCMA",
+                    question: "Manakah di antara latihan-latihan fisik berikut ini yang secara klinis terbukti efektif melatih kekuatan otot tubuh bagian atas (lengan, dada, dan perut)? (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Push-up untuk kekuatan otot lengan dan dada" },
+                        { key: "B", text: "Sit-up untuk melatih kekuatan otot perut" },
+                        { key: "C", text: "Lari santai sore (jogging) pelan selama 5 menit" },
+                        { key: "D", text: "Pull-up untuk kekuatan otot punggung dan lengan atas" }
+                    ],
+                    correctAnswers: ["A", "B", "D"],
+                    explanation: "Push-up (A), Sit-up (B), dan Pull-up (D) adalah latihan kekuatan (strength training) yang mengisolasi kelompok otot tubuh bagian atas. Jogging (C) adalah latihan ketahanan jantung-paru."
+                },
+                {
+                    id: 40,
+                    topic: "Bahaya Rokok",
+                    level: "L2",
+                    type: "MCMA",
+                    question: "Asap rokok mengandung ribuan senyawa beracun. Manakah jenis penyakit kronis di bawah ini yang disebabkan secara langsung oleh kebiasaan merokok aktif jangka panjang? (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Kanker paru-paru" },
+                        { key: "B", text: "Penyakit jantung koroner" },
+                        { key: "C", text: "Penyakit maag akut lambung" },
+                        { key: "D", text: "Bronkitis kronis (gangguan pernapasan)" }
+                    ],
+                    correctAnswers: ["A", "B", "D"],
+                    explanation: "Paparan racun asap rokok merusak jaringan epitel bronkus pemicu kanker paru (A), mengendapkan plak di arteri pemicu jantung koroner (B), serta merusak kantung udara paru-paru (D)."
+                }
+            ],
+            B: [
+                // === PAKET B: 40 SOAL UNIK BARU SESUAI KISI-KISI ===
+                {
+                    id: 1,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "PG",
+                    question: "Gerakan menggulingkan badan ke arah depan dengan posisi badan tetap membulat menyerupai roda berputar pada senam lantai disebut...",
+                    options: [
+                        { key: "A", text: "Guling Belakang" },
+                        { key: "B", text: "Guling Depan" },
+                        { key: "C", text: "Meroda" },
+                        { key: "D", text: "Salto" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Guling depan adalah gerak menggelindingkan badan ke depan dengan membulatkan posisi punggung dan merapatkan dagu ke dada."
+                },
+                {
+                    id: 2,
+                    topic: "Senam Lantai",
+                    level: "L2",
+                    type: "PG",
+                    question: "Dalam pelaksanaan guling belakang (back roll), bagian tubuh manakah yang pertama kali harus mendarat di atas matras setelah kaki ditekuk?",
+                    options: [
+                        { key: "A", text: "Punggung bagian atas" },
+                        { key: "B", text: "Pantat/pinggul" },
+                        { key: "C", text: "Tengkuk leher" },
+                        { key: "D", text: "Kepala belakang" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Awalan guling belakang dimulai dari posisi jongkok membelakangi matras, lalu menjatuhkan panggul/pantat terlebih dahulu sebagai tumpuan awal gulingan."
+                },
+                {
+                    id: 3,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "PG",
+                    question: "Sikap tegak terbalik dengan kepala di bawah dan tumpuan menggunakan kedua telapak tangan secara kokoh di lantai adalah...",
+                    options: [
+                        { key: "A", text: "Headstand" },
+                        { key: "B", text: "Handstand" },
+                        { key: "C", text: "Kayang" },
+                        { key: "D", text: "Sikap Lilin" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Handstand menuntut tumpuan murni pada telapak tangan dengan meluruskan lengan dan menyeimbangkan berat tubuh bagian bawah di atas."
+                },
+                {
+                    id: 4,
+                    topic: "Senam Lantai",
+                    level: "L2",
+                    type: "PG",
+                    question: "Gerakan meregangkan perut ke atas dengan tumpuan telapak tangan dan kaki diletakkan di lantai secara bersamaan disebut...",
+                    options: [
+                        { key: "A", text: "Kayang" },
+                        { key: "B", text: "Sikap Lilin" },
+                        { key: "C", text: "Guling Lenting" },
+                        { key: "D", text: "Sikap Kapal Terbang" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Kayang melatih kelentukan (flexibility) tulang belakang dan otot perut dengan menaruh tumpuan tangan-kaki berhadapan membusur ke atas."
+                },
+                {
+                    id: 5,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "PG",
+                    question: "Gerakan non-lokomotor yang menjadi pola gerak dominan senam lantai saat mempertahankan posisi kayang adalah...",
+                    options: [
+                        { key: "A", text: "Mendarat" },
+                        { key: "B", text: "Keseimbangan dan Bertumpu" },
+                        { key: "C", text: "Melayang" },
+                        { key: "D", text: "Putaran" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Kayang mengombinasikan kekuatan bertumpu pada anggota gerak dengan keseimbangan agar tubuh melengkung sempurna tanpa terjatuh."
+                },
+                {
+                    id: 6,
+                    topic: "Gerak Berirama",
+                    level: "L2",
+                    type: "PG",
+                    question: "Jika kaki kanan dilangkahkan ke depan pada hitungan satu, ayunan lengan kiri diayunkan ke depan. Gerakan ini merupakan bentuk dari koordinasi...",
+                    options: [
+                        { key: "A", text: "Langkah dan ayunan silang" },
+                        { key: "B", text: "Langkah sejajar searah" },
+                        { key: "C", text: "Lompatan statis" },
+                        { key: "D", text: "Peregangan pasif" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Langkah silang (kaki kanan berpasangan dengan tangan kiri) bertujuan untuk menjaga pusat gravitasi tubuh berada di tengah."
+                },
+                {
+                    id: 7,
+                    topic: "Gerak Berirama",
+                    level: "L1",
+                    type: "PG",
+                    question: "Salah satu manfaat fisik terbesar yang diperoleh jika kita secara konsisten melakukan senam irama 3 kali seminggu adalah...",
+                    options: [
+                        { key: "A", text: "Meningkatkan fungsi kerja paru-paru dan kebugaran jantung" },
+                        { key: "B", text: "Membuat otot dada menjadi sangat tebal" },
+                        { key: "C", text: "Menghilangkan kemampuan lentur persendian" },
+                        { key: "D", text: "Mengurangi kelincahan kaki" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Senam irama melatih sistem sirkulasi darah serta melatih pernapasan secara kontinyu sehingga memperkuat kerja organ kardiovaskular."
+                },
+                {
+                    id: 8,
+                    topic: "Gerak Berirama",
+                    level: "L1",
+                    type: "PG",
+                    question: "Jenis aktivitas jasmani berikut ini yang sangat bergantung pada kemampuan koordinasi mata-telinga-kaki-tangan adalah...",
+                    options: [
+                        { key: "A", text: "Senam irama mengikuti ketukan lagu" },
+                        { key: "B", text: "Tidur telentang" },
+                        { key: "C", text: "Angkat beban statis" },
+                        { key: "D", text: "Menahan napas di air" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Mendengar musik (telinga), melihat gerakan instruktur (mata), melangkah (kaki), dan mengayun (tangan) disinkronisasikan dalam senam irama."
+                },
+                {
+                    id: 9,
+                    topic: "Gerak Berirama",
+                    level: "L3",
+                    type: "PG",
+                    question: "Urutkan langkah gerakan langkah rapat (bijtrekpas) berikut ini:<br>1) Berdiri dengan sikap tegak rileks.<br>2) Hitungan 1, langkahkan kaki kanan ke depan.<br>3) Hitungan 2, langkahkan kaki kiri menyusul merapat ke kaki kanan.<br>Urutan yang benar untuk melatih bijtrekpas adalah...",
+                    options: [
+                        { key: "A", text: "1) - 2) - 3)" },
+                        { key: "B", text: "3) - 2) - 1)" },
+                        { key: "C", text: "2) - 3) - 1)" },
+                        { key: "D", text: "1) - 3) - 2)" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Sikap awal berdiri tegak (1), dilanjutkan langkah kaki kanan (2), lalu disusul merapatkan kaki kiri di sebelahnya (3)."
+                },
+                {
+                    id: 10,
+                    topic: "Gerak Berirama",
+                    level: "L1",
+                    type: "PG",
+                    question: "Sebelum melakukan rangkaian gerak senam irama, peserta didik harus mengambil posisi sikap awal berdiri tegak dengan pandangan lurus ke depan yang bertujuan untuk...",
+                    options: [
+                        { key: "A", text: "Memudahkan konsentrasi dan keseimbangan awal tubuh" },
+                        { key: "B", text: "Agar terlihat menakutkan bagi penonton" },
+                        { key: "C", text: "Mempercepat kelelahan kaki" },
+                        { key: "D", text: "Mencegah peredaran darah lancar" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Sikap siap (berdiri tegak) menempatkan otot-otot dalam kondisi tegangan optimal untuk merespons ketukan pertama musik secara tangkas."
+                },
+                {
+                    id: 11,
+                    topic: "Aktivitas Air",
+                    level: "L1",
+                    type: "PG",
+                    question: "Mengapa semua orang disarankan untuk tidak langsung terjun ke kolam renang tanpa melakukan pemanasan sendi terlebih dahulu?",
+                    options: [
+                        { key: "A", text: "Suhu dingin kolam dapat mengejutkan otot dan menyebabkan kram mendadak" },
+                        { key: "B", text: "Agar baju renang tidak cepat basah" },
+                        { key: "C", text: "Supaya air kolam tidak menjadi keruh" },
+                        { key: "D", text: "Mempersingkat waktu berenang" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Transisi suhu udara luar ke air dingin berpotensi mengagetkan pembuluh darah; pemanasan menyeimbangkan suhu internal tubuh."
+                },
+                {
+                    id: 12,
+                    topic: "Aktivitas Air",
+                    level: "L1",
+                    type: "PG",
+                    question: "Gaya renang yang posisi wajahnya selalu menghadap ke atas langit sehingga memudahkan bernapas sepanjang waktu adalah gaya...",
+                    options: [
+                        { key: "A", text: "Gaya Bebas" },
+                        { key: "B", text: "Gaya Dada" },
+                        { key: "C", text: "Gaya Punggung" },
+                        { key: "D", text: "Gaya Kupu-kupu" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Renang gaya punggung menempatkan wajah di atas permukaan air secara konstan karena posisi badan terlentang di permukaan air."
+                },
+                {
+                    id: 13,
+                    topic: "Aktivitas Air",
+                    level: "L2",
+                    type: "PG",
+                    question: "Ketika meluncur di dalam kolam renang, posisi kedua belah tangan kita yang paling tepat dan aerodinamis adalah...",
+                    options: [
+                        { key: "A", text: "Lurus sejajar menunjuk ke depan merapat menjepit kepala" },
+                        { key: "B", text: "Ditekuk memegang pinggang" },
+                        { key: "C", text: "Dibuka lebar di samping kiri kanan" },
+                        { key: "D", text: "Saling mengepal kuat di depan perut" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Kedua lengan lurus ke depan menjepit kepala berguna mengarahkan laju seluncuran lurus ke depan membelah hambatan air."
+                },
+                {
+                    id: 14,
+                    topic: "Aktivitas Air",
+                    level: "L2",
+                    type: "PG",
+                    question: "Jika Anda melihat papan peringatan bergambar kedalaman air '3 Meter' sedangkan Anda belum mahir berenang, tindakan keselamatan yang benar adalah...",
+                    options: [
+                        { key: "A", text: "Tetap melompat ke kolam tersebut demi mencoba tantangan" },
+                        { key: "B", text: "Menghindari area tersebut and berenang di kolam dangkal sesuai kemampuan" },
+                        { key: "C", text: "Mengabaikannya karena menganggap papan tersebut hanya pajangan" },
+                        { key: "D", text: "Mendorong teman lain untuk membuktikan kedalaman kolam" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Menyadari batas kemampuan diri sangat vital demi mencegah insiden tenggelam di kolam dengan kedalaman di atas tinggi badan."
+                },
+                {
+                    id: 15,
+                    topic: "Aktivitas Air",
+                    level: "L1",
+                    type: "PG",
+                    question: "Alat berbentuk lingkaran seperti ban tiup yang dilekatkan di lengan kiri-kanan balita atau pemula untuk membantunya terapung di air disebut...",
+                    options: [
+                        { key: "A", text: "Kaki katak" },
+                        { key: "B", text: "Ban pelampung lengan (armband)" },
+                        { key: "C", text: "Papan luncur kayu" },
+                        { key: "D", text: "Masker snorkel" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Armband memberikan daya apung ekstra di bagian bahu/lengan untuk menjaga kepala anak/pemula tetap berada di atas permukaan air."
+                },
+                {
+                    id: 16,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Kondisi kebugaran jasmani seseorang dicirikan oleh kemampuannya melakukan tugas fisik harian secara prima tanpa merasakan...",
+                    options: [
+                        { key: "A", text: "Kelelahan berlebihan atau cedera yang mengganggu" },
+                        { key: "B", text: "Rasa lapar sama sekali" },
+                        { key: "C", text: "Peningkatan denyut jantung" },
+                        { key: "D", text: "Keluarnya keringat dari pori-pori" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Orang bugar memiliki efisiensi metabolisme energi tinggi sehingga kelelahan tidak terakumulasi setelah beraktivitas biasa."
+                },
+                {
+                    id: 17,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Latihan lari zig-zag (berkelok-kelok) melintasi beberapa tiang pembatas bertujuan utama meningkatkan unsur kebugaran...",
+                    options: [
+                        { key: "A", text: "Kecepatan murni" },
+                        { key: "B", text: "Keseimbangan statis" },
+                        { key: "C", text: "Kelincahan (agility)" },
+                        { key: "D", text: "Kelenturan sendi" }
+                    ],
+                    correctAnswer: "C",
+                    explanation: "Lari zig-zag melatih respons refleks saraf otot untuk beralih haluan arah secara mendadak dengan cepat dan stabil."
+                },
+                {
+                    id: 18,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Tes kebugaran jasmani berupa gantung angkat tubuh memerlukan alat bantu penopang tubuh yang dinamakan...",
+                    options: [
+                        { key: "A", text: "Tiang gawang sepak bola" },
+                        { key: "B", text: "Palang tunggal setinggi jangkauan" },
+                        { key: "C", text: "Tembok bata yang kasar" },
+                        { key: "D", text: "Meja belajar kayu" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Palang tunggal didesain khusus agar kuat menahan beban ayunan/tarikan tubuh secara vertikal dalam tes pull-up."
+                },
+                {
+                    id: 19,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Di bawah ini adalah gaya hidup tidak aktif (sedentary lifestyle) yang berdampak buruk menurunkan tingkat kebugaran jasmani, yaitu...",
+                    options: [
+                        { key: "A", text: "Terlalu banyak duduk diam di depan komputer sambil makan junk food" },
+                        { key: "B", text: "Bersepeda keliling komplek rumah di pagi hari" },
+                        { key: "C", text: "Membantu orang tua membersihkan kebun" },
+                        { key: "D", text: "Senam lantai di matras bersama guru" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Kurang gerak dikombinasikan makanan tinggi lemak/gula mempercepat penimbunan kalori menjadi lemak tubuh berbahaya."
+                },
+                {
+                    id: 20,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "PG",
+                    question: "Untuk mengukur daya tahan dan kekuatan otot perut seseorang, tes fisik kebugaran yang paling tepat digunakan adalah...",
+                    options: [
+                        { key: "A", text: "Pull-up" },
+                        { key: "B", text: "Sit-up selama 30-60 detik" },
+                        { key: "C", text: "Lari cepat 50 meter" },
+                        { key: "D", text: "Mendorong tembok beton" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Sit-up memicu kontraksi repetitif pada otot abdominis perut, menjadikannya alat ukur utama kekuatan otot bagian perut."
+                },
+                {
+                    id: 21,
+                    topic: "Bahaya Narkoba",
+                    level: "L2",
+                    type: "PG",
+                    question: "Secara mental psikologis, pecandu zat psikotropika sering kali menunjukkan sikap yang menyimpang seperti...",
+                    options: [
+                        { key: "A", text: "Sangat perhatian terhadap kebersihan rumah" },
+                        { key: "B", text: "Sering cemas berlebih, tidak jujur, dan emosi mudah meledak" },
+                        { key: "C", text: "Menjadi rajin belajar demi masa depan" },
+                        { key: "D", text: "Suka menolong sesama teman" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Sifat adiksi narkoba menuntut pemenuhan zat secara konstan, membuat moral pecandu merosot hingga berbohong atau mencuri demi membeli barang haram tersebut."
+                },
+                {
+                    id: 22,
+                    topic: "Bahaya Rokok",
+                    level: "L1",
+                    type: "PG",
+                    question: "Selain nikotin, di dalam asap rokok terkandung gas beracun tanpa warna dan bau yang mengikat hemoglobin darah sehingga menghambat pasokan oksigen ke jantung. Gas tersebut adalah...",
+                    options: [
+                        { key: "A", text: "Karbon Monoksida (CO)" },
+                        { key: "B", text: "Oksigen (O2)" },
+                        { key: "C", text: "Nitrogen Cair" },
+                        { key: "D", text: "Uap air murni" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Karbon Monoksida memiliki daya ikat ke hemoglobin jauh lebih kuat daripada oksigen, memicu sesak napas dan hipoksia jaringan pada perokok."
+                },
+                {
+                    id: 23,
+                    topic: "Bahaya Narkoba",
+                    level: "L2",
+                    type: "PG",
+                    question: "Bentuk sosialisasi hidup sehat bebas narkoba melalui pembagian brosur dan mading sekolah tergolong sebagai upaya pencegahan bersifat...",
+                    options: [
+                        { key: "A", text: "Kuratif" },
+                        { key: "B", text: "Promotif" },
+                        { key: "C", text: "Rehabilitatif" },
+                        { key: "D", text: "Represif" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Upaya promotif berfokus pada menyebarluaskan nilai-nilai hidup sehat secara persuasif kepada kelompok masyarakat luas agar menjauhi penyalahgunaan."
+                },
+                {
+                    id: 24,
+                    topic: "Bahaya Narkoba",
+                    level: "L1",
+                    type: "PG",
+                    question: "Mengapa zat narkotika jenis halusinogen sangat dilarang keras untuk dikonsumsi secara bebas?",
+                    options: [
+                        { key: "A", text: "Karena merusak persepsi realitas dan menyebabkan ilusi palsu di otak" },
+                        { key: "B", text: "Karena dapat menyembuhkan penyakit demam" },
+                        { key: "C", text: "Sebab bisa memicu nafsu makan bertambah" },
+                        { key: "D", text: "Dapat mencerahkan mata dari kantuk" }
+                    ],
+                    correctAnswer: "A",
+                    explanation: "Zat halusinogen memanipulasi zat kimiawi otak (neurotransmiter) sehingga pemakai mempersepsikan dunia fantasi yang membahayakan dirinya sendiri."
+                },
+                {
+                    id: 25,
+                    topic: "Bahaya Narkoba",
+                    level: "L2",
+                    type: "PG",
+                    question: "Tanaman ganja ilegal (Cannabis sativa) sering disalahgunakan di kalangan pecandu. Zat aktif adiktif terbesar terdapat pada bagian...",
+                    options: [
+                        { key: "A", text: "Akar tunggang tanaman" },
+                        { key: "B", text: "Daun dan pucuk bunga kering" },
+                        { key: "C", text: "Kulit kayu pohon" },
+                        { key: "D", text: "Biji buah bagian dalam" }
+                    ],
+                    correctAnswer: "B",
+                    explanation: "Daun dan bunga ganja mengandung resin berkonsentrasi tinggi zat THC yang merangsang saraf pusat dengan cara halusinogenik."
+                },
+                {
+                    id: 26,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "BS",
+                    question: "Gerakan berdiri dengan tumpuan kedua tangan (handstand) melatih kekuatan otot lengan dan keseimbangan secara statis.",
+                    correctAnswer: "BENAR",
+                    explanation: "Handstand bertumpu pada lengan, membutuhkan kontraksi isometrik otot lengan dan bahu serta otot inti tubuh demi tegak lurus."
+                },
+                {
+                    id: 27,
+                    topic: "Senam Lantai",
+                    level: "L1",
+                    type: "BS",
+                    question: "Saat menggulingkan tubuh ke belakang, dagu harus ditekan rapat ke dada agar kepala terlindung dan gulingan membulat sempurna.",
+                    correctAnswer: "BENAR",
+                    explanation: "Merapatkan dagu ke dada membuat kurva tulang belakang melengkung cembung keluar sehingga berguling menjadi mulus tanpa hambatan."
+                },
+                {
+                    id: 28,
+                    topic: "Senam Irama",
+                    level: "L2",
+                    type: "BS",
+                    question: "Kemampuan menjaga keseimbangan tubuh tidak memiliki peran sama sekali dalam mendukung keberhasilan teknik gerakan senam lantai.",
+                    correctAnswer: "SALAH",
+                    explanation: "Keseimbangan adalah pilar penentu agar pesenam tidak roboh setelah berputar, berayun, melompat, atau melakukan pose statis senam."
+                },
+                {
+                    id: 29,
+                    topic: "Senam Irama",
+                    level: "L1",
+                    type: "BS",
+                    question: "Gerak berirama mengombinasikan langkah kaki dengan ayunan lengan yang diselaraskan mengikuti tempo musik pengiring.",
+                    correctAnswer: "BENAR",
+                    explanation: "Harmonisasi antara ketukan musik (auditif) dengan motorik lengan dan kaki merupakan esensi dasar dari senam irama."
+                },
+                {
+                    id: 30,
+                    topic: "Aktivitas Air",
+                    level: "L1",
+                    type: "BS",
+                    question: "Pemanasan sebelum berenang dapat diabaikan jika suhu air kolam dirasa sudah cukup hangat oleh tubuh.",
+                    correctAnswer: "SALAH",
+                    explanation: "Meskipun air hangat, otot tetap membutuhkan pemanasan (stretching) agar sendi fleksibel bergerak di air untuk menghindari risiko cedera robek otot."
+                },
+                {
+                    id: 31,
+                    topic: "Aktivitas Air",
+                    level: "L2",
+                    type: "BS",
+                    question: "Menerapkan peraturan keselamatan di kolam renang bertujuan untuk meminimalisir angka kecelakaan di air.",
+                    correctAnswer: "BENAR",
+                    explanation: "Peraturan kolam renang dirancang berdasarkan manajemen risiko kecelakaan air demi keselamatan seluruh pengunjung."
+                },
+                {
+                    id: 32,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "BS",
+                    question: "Melakukan warming up (pemanasan) sangat penting untuk menghindari kram otot jantung akibat beban latihan mendadak.",
+                    correctAnswer: "BENAR",
+                    explanation: "Warming up menaikkan pasokan oksigen ke otot jantung secara teratur untuk mengimbangi beban kerja berat yang akan datang."
+                },
+                {
+                    id: 33,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "BS",
+                    question: "Latihan naik turun tangga dapat melatih kekuatan otot kaki dan daya tahan jantung.",
+                    correctAnswer: "BENAR",
+                    explanation: "Latihan naik-turun tangga merupakan latihan dinamis fungsional yang sangat efektif membakar kalori dan menguatkan tungkai bawah."
+                },
+                {
+                    id: 34,
+                    topic: "Bahaya Narkoba",
+                    level: "L1",
+                    type: "BS",
+                    question: "Pemerintah RI mendirikan BNN sebagai badan khusus pencegah penyebaran gelap narkoba di wilayah kedaulatan Indonesia.",
+                    correctAnswer: "BENAR",
+                    explanation: "BNN merupakan garda terdepan kepolisian khusus non-kementerian dalam membongkar kartel peredaran gelap narkoba di tanah air."
+                },
+                {
+                    id: 35,
+                    topic: "Bahaya Narkoba",
+                    level: "L2",
+                    type: "BS",
+                    question: "Minuman keras mengandung zat etil alkohol (etanol) yang bekerja menstimulasi sistem saraf pusat agar berpikir sangat jernih.",
+                    correctAnswer: "SALAH",
+                    explanation: "Alkohol sebenarnya bersifat depresan, yaitu memperlambat fungsi sistem saraf pusat sehingga merusak koordinasi motorik dan kesadaran berpikir."
+                },
+                {
+                    id: 36,
+                    topic: "Senam Lantai",
+                    level: "L3",
+                    type: "MCMA",
+                    question: "Manakah di bawah ini teknik persiapan awal yang benar sebelum melakukan gerakan guling depan? (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Berdiri tegak menghadap arah matras" },
+                        { key: "B", text: "Menaruh punggung tangan di pinggang" },
+                        { key: "C", text: "Menaruh kedua telapak tangan rata di atas matras" },
+                        { key: "D", text: "Menekuk kedua lutut kaki dalam posisi jongkok seimbang" }
+                    ],
+                    correctAnswers: ["A", "C", "D"],
+                    explanation: "Persiapan guling depan bisa diawali dari berdiri tegak (A) atau jongkok (D) dengan menumpukan telapak tangan rata di matras (C) untuk tolakan kuat."
+                },
+                {
+                    id: 37,
+                    topic: "Gerak Berirama",
+                    level: "L2",
+                    type: "MCMA",
+                    question: "Manakah yang merupakan jenis-jenis ketukan ritme pengiring dalam gerak berirama senam irama? (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Ketukan 2/4 (tempo mars lambat)" },
+                        { key: "B", text: "Ketukan bebas tanpa tempo tetap" },
+                        { key: "C", text: "Ketukan 3/4 (ritme waltz)" },
+                        { key: "D", text: "Ketukan 4/4 (tempo senam aerobik populer)" }
+                    ],
+                    correctAnswers: ["A", "C", "D"],
+                    explanation: "Irama senam terstruktur rapi dalam hitungan birama matematis seperti 2/4 (A), 3/4 (C), atau 4/4 (D) agar gerakan senada dengan musik pengiring."
+                },
+                {
+                    id: 38,
+                    topic: "Aktivitas Air",
+                    level: "L2",
+                    type: "MCMA",
+                    question: "Di bawah ini, manakah tindakan yang tergolong sebagai etika baik menjaga higienitas dan kenyamanan air kolam renang umum? (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Membasuh tubuh/mandi bilas sebelum masuk ke kolam utama" },
+                        { key: "B", text: "Meludah di dalam air kolam renang sesuka hati" },
+                        { key: "C", text: "Menggunakan pakaian renang standar, bukan pakaian kaos harian" },
+                        { key: "D", text: "Tidak berenang apabila sedang mengidap penyakit kulit menular" }
+                    ],
+                    correctAnswers: ["A", "C", "D"],
+                    explanation: "Membilas tubuh (A), mengenakan pakaian renang sintetis (C), dan tidak berenang saat sakit kulit (D) menjaga air terhindar dari kuman patogen."
+                },
+                {
+                    id: 39,
+                    topic: "Kebugaran Jasmani",
+                    level: "L1",
+                    type: "MCMA",
+                    question: "Pilihlah bentuk-bentuk aktivitas latihan kebugaran fisik yang dirancang untuk meningkatkan stamina kekuatan jantung-paru (kardiorespiratori)! (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Bersepeda santai keliling kota selama 30 menit" },
+                        { key: "B", text: "Latihan lari aerobik berdurasi panjang" },
+                        { key: "C", text: "Latihan angkat barbel statis" },
+                        { key: "D", text: "Berenang gaya dada sejauh 200 meter" }
+                    ],
+                    correctAnswers: ["A", "B", "D"],
+                    explanation: "Aktivitas kardio seperti bersepeda (A), lari aerobik (B), dan berenang (D) memacu peningkatan asupan oksigen secara konstan untuk memperkuat otot jantung."
+                },
+                {
+                    id: 40,
+                    topic: "Bahaya Rokok",
+                    level: "L2",
+                    type: "MCMA",
+                    question: "Bahan kimia beracun apa sajakah yang terdapat di dalam sebatang rokok yang merusak sistem metabolisme organ dalam manusia? (Pilih 2 atau lebih jawaban benar)",
+                    options: [
+                        { key: "A", text: "Gas Karbon Monoksida yang mengikat oksigen darah" },
+                        { key: "B", text: "Tar yang mengendap hitam menyumbat alveolus paru" },
+                        { key: "C", text: "Zat adiktif Nikotin yang memicu kecanduan" },
+                        { key: "D", text: "Cairan Vitamin C dosis tinggi" }
+                    ],
+                    correctAnswers: ["A", "B", "C"],
+                    explanation: "Karbon monoksida (A), Tar (B), dan Nikotin (C) adalah senyawa toksik pembunuh utama dalam rokok. Rokok sama sekali tidak mengandung Vitamin C (D)."
+                }
+            ]
+        };
+
+        // State Aplikasi
+        let currentPackage = "A";
+        let studentName = "";
+        let studentClass = "";
+        let activeQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = {}; // Format: { questionId: answerKey } -- untuk MCMA berupa array ["A", "B"]
+        let timeRemaining = 3600; // 60 menit dalam detik
+        let timerInterval = null;
+        let isExamFinished = false;
+        let liveSyncInterval = null; // Detak jantung untuk monitoring aktif
+
+        // Inisialisasi Lucide Icons & Deteksi Sesi Aktif
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            // Listen event LocalStorage jika dibuka di multi-tab untuk sinkronisasi instan monitor guru
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'pjok_active_sessions') {
+                    if (document.getElementById('adminSection').classList.contains('hidden') === false) {
+                        loadAdminData();
+                    }
+                    // Jika sesi siswa di-reset oleh guru di tab admin
+                    if (studentName && studentClass) {
+                        const activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+                        const sessionKey = `${studentName.toLowerCase().replace(/\s+/g, '_')}_${studentClass}`;
+                        if (!activeSessions[sessionKey] && !isExamFinished && !document.getElementById('examSection').classList.contains('hidden')) {
+                            forceKickStudent("Sesi Anda telah di-reset oleh Guru di ruang utama.");
+                        } else if (activeSessions[sessionKey] && activeSessions[sessionKey].forceSubmit && !isExamFinished) {
+                            forceKickStudent("Guru telah memaksa mengumpulkan jawaban Anda secara jarak jauh.");
+                            finishExam();
+                        }
+                    }
+                }
+            });
+
+            generateDefaultSVG();
+        });
+
+        // Event Listener Form Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const rawName = document.getElementById('inputName').value.trim();
+            const selectedClass = document.getElementById('inputClass').value;
+            const selectedPackage = document.getElementById('inputPackage').value;
+
+            if(!rawName) {
+                showToast("Silakan masukkan nama Anda!");
+                return;
+            }
+
+            studentName = rawName;
+            studentClass = selectedClass;
+            currentPackage = selectedPackage;
+
+            // Cek apakah ada sesi aktif untuk kombinasi Nama & Kelas ini
+            const sessionKey = `${studentName.toLowerCase().replace(/\s+/g, '_')}_${studentClass}`;
+            const activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+            
+            if (activeSessions[sessionKey]) {
+                // Tampilkan menu pemulihan (Recovery Screen)
+                showRecoveryScreen(activeSessions[sessionKey]);
+            } else {
+                startExam();
+            }
+        });
+
+        // Menampilkan Layar Pemulihan Sesi
+        function showRecoveryScreen(session) {
+            document.getElementById('recoveryName').innerText = session.name;
+            document.getElementById('recoveryClass').innerText = session.class;
+            document.getElementById('recoveryPackage').innerText = "Paket " + session.package;
+            
+            const minutes = Math.floor(session.timeRemaining / 60);
+            const seconds = session.timeRemaining % 60;
+            document.getElementById('recoveryTime').innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // Hitung terjawab
+            let answered = 0;
+            Object.keys(session.userAnswers).forEach(k => {
+                if (session.userAnswers[k] && session.userAnswers[k].length !== 0) answered++;
+            });
+            document.getElementById('recoveryAnswered').innerText = `${answered} dari 40 soal`;
+
+            // Atur tombol minta reset
+            const reqBtn = document.getElementById('requestResetBtn');
+            if (session.requestReset) {
+                reqBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> <span>Menunggu Guru Mereset...</span>`;
+                reqBtn.className = "w-full bg-slate-100 text-slate-400 font-bold py-3 px-4 rounded-xl flex items-center justify-center space-x-2 cursor-not-allowed";
+                reqBtn.disabled = true;
+            } else {
+                reqBtn.innerHTML = `<i data-lucide="help-circle" class="w-4 h-4"></i> <span>Minta Reset ke Guru (Mulai Ulang)</span>`;
+                reqBtn.className = "w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 font-bold py-3 px-4 rounded-xl flex items-center justify-center space-x-2 transition-all";
+                reqBtn.disabled = false;
+            }
+
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('recoverySection').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        // Batal Recovery, Balik ke Login
+        function cancelRecovery() {
+            document.getElementById('recoverySection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        }
+
+        // Kirim permintaan reset sesi ke Guru
+        function requestResetFromLogin() {
+            const sessionKey = `${studentName.toLowerCase().replace(/\s+/g, '_')}_${studentClass}`;
+            let activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+            
+            if (activeSessions[sessionKey]) {
+                activeSessions[sessionKey].requestReset = true;
+                activeSessions[sessionKey].lastHeartbeat = Date.now(); // Perbarui sinyal agar terdeteksi
+                localStorage.setItem('pjok_active_sessions', JSON.stringify(activeSessions));
+                
+                showToast("Sinyal permintaan reset telah dikirim ke Guru. Mohon tunggu guru menyetujui.");
+                showRecoveryScreen(activeSessions[sessionKey]);
+            }
+        }
+
+        // Memulai Jalannya Ujian
+        function startExam() {
+            // Setup Header Identitas
+            document.getElementById('headerStudentName').innerText = studentName;
+            document.getElementById('headerStudentClass').innerText = "Kelas " + studentClass;
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+
+            // Set Data Soal Sesuai Paket
+            activeQuestions = examData[currentPackage];
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            isExamFinished = false;
+
+            // Atur Label Paket
+            document.getElementById('badgePaket').innerText = "Paket " + currentPackage;
+
+            // Sembunyikan Login/Recovery, Tampilkan Ujian
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('recoverySection').classList.add('hidden');
+            document.getElementById('examSection').classList.remove('hidden');
+
+            // Mulai Timer & Kirim Detak Jantung Aktif
+            timeRemaining = 3600; 
+            startTimer();
+            startLiveSync();
+
+            // Render Navigasi Soal
+            renderNavigationGrid();
+
+            // Load Soal Pertama
+            loadQuestion(0);
+            updateAnsweredCounter();
+        }
+
+        // Memulihkan Sesi Terdeteksi & Memulai Ujian
+        function resumeExamSession() {
+            const sessionKey = `${studentName.toLowerCase().replace(/\s+/g, '_')}_${studentClass}`;
+            const activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+            const session = activeSessions[sessionKey];
+
+            if (!session) {
+                showToast("Gagal memulihkan sesi ujian.");
+                cancelRecovery();
+                return;
+            }
+
+            // Restore State
+            currentPackage = session.package;
+            userAnswers = session.userAnswers;
+            timeRemaining = session.timeRemaining;
+            currentQuestionIndex = session.currentQuestionIndex || 0;
+
+            // Setup Header Identitas
+            document.getElementById('headerStudentName').innerText = studentName;
+            document.getElementById('headerStudentClass').innerText = "Kelas " + studentClass;
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+
+            // Set Data Soal
+            activeQuestions = examData[currentPackage];
+            isExamFinished = false;
+
+            document.getElementById('badgePaket').innerText = "Paket " + currentPackage;
+
+            // Tampilkan Layar Ujian
+            document.getElementById('recoverySection').classList.add('hidden');
+            document.getElementById('examSection').classList.remove('hidden');
+
+            // Jalankan Timer & Sinkronisasi Aktif
+            startTimer();
+            startLiveSync();
+
+            // Render Navigasi Soal
+            renderNavigationGrid();
+            loadQuestion(currentQuestionIndex);
+            updateAnsweredCounter();
+
+            showToast("Selamat datang kembali! Sesi pengerjaan berhasil dipulihkan.");
+        }
+
+        // Pengatur Waktu Mundur
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                if (timeRemaining <= 0) {
+                    timeRemaining = 0;
+                    clearInterval(timerInterval);
+                    autoSubmitExam();
+                }
+                
+                // Format display MM:SS
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                document.getElementById('timerDisplay').innerText = 
+                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // --- MONITORING: Sinkronisasi Detak Jantung Siswa Aktif ---
+        function startLiveSync() {
+            if (liveSyncInterval) clearInterval(liveSyncInterval);
+            
+            // Detak pertama langsung disimpan
+            sendHeartbeat();
+
+            liveSyncInterval = setInterval(() => {
+                if (!isExamFinished) {
+                    sendHeartbeat();
+                }
+            }, 3000); // Kirim sinyal setiap 3 detik
+        }
+
+        function sendHeartbeat() {
+            const sessionKey = `${studentName.toLowerCase().replace(/\s+/g, '_')}_${studentClass}`;
+            let activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+
+            // Hitung jumlah jawaban saat ini
+            let ansCount = 0;
+            Object.keys(userAnswers).forEach(k => {
+                if (userAnswers[k] && userAnswers[k].length !== 0) ansCount++;
+            });
+
+            // Jika sesi dihapus guru dari tab lain sewaktu siswa sedang mengerjakan
+            if (studentName && !activeSessions[sessionKey] && !isExamFinished) {
+                forceKickStudent("Sesi ujian Anda telah di-reset oleh Guru.");
+                return;
+            }
+
+            // Jika guru memaksa mengumpulkan
+            if (activeSessions[sessionKey] && activeSessions[sessionKey].forceSubmit) {
+                forceKickStudent("Ujian Anda telah dikumpulkan secara paksa oleh Guru.");
+                finishExam();
+                return;
+            }
+
+            activeSessions[sessionKey] = {
+                name: studentName,
+                class: studentClass,
+                package: currentPackage,
+                currentQuestionIndex: currentQuestionIndex,
+                userAnswers: userAnswers,
+                timeRemaining: timeRemaining,
+                lastHeartbeat: Date.now(),
+                requestReset: activeSessions[sessionKey]?.requestReset || false,
+                answeredCount: ansCount,
+                forceSubmit: false
+            };
+
+            localStorage.setItem('pjok_active_sessions', JSON.stringify(activeSessions));
+        }
+
+        // Hapus Sesi Aktif saat Siswa Berhasil Menyelesaikan Ujian
+        function clearActiveSession() {
+            if (liveSyncInterval) clearInterval(liveSyncInterval);
+            const sessionKey = `${studentName.toLowerCase().replace(/\s+/g, '_')}_${studentClass}`;
+            let activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+            delete activeSessions[sessionKey];
+            localStorage.setItem('pjok_active_sessions', JSON.stringify(activeSessions));
+        }
+
+        // Ditendang keluar paksa
+        function forceKickStudent(reason) {
+            clearInterval(timerInterval);
+            clearInterval(liveSyncInterval);
+            isExamFinished = true;
+            
+            // Tutup semua halaman, kembali ke login
+            document.getElementById('examSection').classList.add('hidden');
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('recoverySection').classList.add('hidden');
+            document.getElementById('userInfoHeader').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            
+            alert(reason); // Custom modal/alert untuk memberitahu siswa
+        }
+
+        // Load Soal Ke-i
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = activeQuestions[index];
+
+            // Update Header Soal
+            document.getElementById('currentNum').innerText = index + 1;
+            document.getElementById('cognitiveLevel').innerText = q.level;
+            
+            // Set Tipe Soal & Label
+            const typeLabel = document.getElementById('questionTypeLabel');
+            if(q.type === "PG") {
+                typeLabel.innerText = "Pilihan Ganda";
+                typeLabel.className = "text-xs font-bold tracking-wide uppercase px-2.5 py-1 rounded bg-blue-50 text-blue-700 border border-blue-100";
+                document.getElementById('mcmaHint').classList.add('hidden');
+            } else if(q.type === "BS") {
+                typeLabel.innerText = "Pilihan Benar / Salah";
+                typeLabel.className = "text-xs font-bold tracking-wide uppercase px-2.5 py-1 rounded bg-amber-50 text-amber-700 border border-amber-100";
+                document.getElementById('mcmaHint').classList.add('hidden');
+            } else if(q.type === "MCMA") {
+                typeLabel.innerText = "Pilihan Ganda Kompleks";
+                typeLabel.className = "text-xs font-bold tracking-wide uppercase px-2.5 py-1 rounded bg-purple-50 text-purple-700 border border-purple-100";
+                document.getElementById('mcmaHint').classList.remove('hidden');
+            }
+
+            // Set Teks Pertanyaan
+            document.getElementById('questionText').innerHTML = q.question;
+
+            // Render Gambar khusus untuk Kisi Ganja (Soal 25 Paket A / Paket B)
+            const imgContainer = document.getElementById('questionImageContainer');
+            if(q.id === 25 && q.topic === "Bahaya Narkoba") {
+                imgContainer.classList.remove('hidden');
+                document.getElementById('imageCaption').innerText = "Gambar Daun Tanaman Penyebab Halusinasi";
+                document.getElementById('imagePlaceholder').innerHTML = `
+                    <svg viewBox="0 0 100 100" class="w-40 h-40 text-emerald-600 fill-current">
+                        <path d="M50,85 C51,75 50,45 50,15 C49,45 48,75 50,85 Z" />
+                        <path d="M50,85 C54,73 63,48 78,35 C63,48 54,73 50,85 Z" />
+                        <path d="M50,85 C46,73 37,48 22,35 C37,48 46,73 50,85 Z" />
+                        <path d="M50,85 C56,76 75,60 90,60 C75,60 56,76 50,85 Z" />
+                        <path d="M50,85 C44,76 25,60 10,60 C25,60 44,76 50,85 Z" />
+                        <line x1="50" y1="85" x2="50" y2="95" stroke="#10b981" stroke-width="3" />
+                    </svg>
+                `;
+            } else {
+                imgContainer.classList.add('hidden');
+            }
+
+            // Render Pilihan Jawaban
+            const optContainer = document.getElementById('optionsContainer');
+            optContainer.innerHTML = "";
+
+            if (q.type === "PG") {
+                q.options.forEach(opt => {
+                    const isSelected = userAnswers[q.id] === opt.key;
+                    const optBtn = document.createElement('button');
+                    optBtn.className = `w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between ${
+                        isSelected 
+                        ? 'border-blue-600 bg-blue-50/50 ring-2 ring-blue-500 font-semibold' 
+                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    }`;
+                    optBtn.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border font-bold ${
+                                isSelected ? 'bg-blue-600 text-white border-blue-600' : 'bg-white border-slate-300 text-slate-500'
+                            }">${opt.key}</span>
+                            <span class="text-sm text-slate-700">${opt.text}</span>
+                        </div>
+                        <span class="w-5 h-5 rounded-full border flex items-center justify-center ${
+                            isSelected ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-300 bg-white'
+                        }">
+                            ${isSelected ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
+                        </span>
+                    `;
+                    optBtn.addEventListener('click', () => selectSingleAnswer(q.id, opt.key));
+                    optContainer.appendChild(optBtn);
+                });
+            } else if (q.type === "BS") {
+                const options = ["BENAR", "SALAH"];
+                options.forEach(opt => {
+                    const isSelected = userAnswers[q.id] === opt;
+                    const isBenar = opt === "BENAR";
+                    const activeColor = isBenar ? 'emerald' : 'rose';
+                    
+                    const optBtn = document.createElement('button');
+                    optBtn.className = `w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between ${
+                        isSelected 
+                        ? `border-${activeColor}-600 bg-${activeColor}-50/50 ring-2 ring-${activeColor}-500 font-semibold` 
+                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    }`;
+                    optBtn.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border font-bold ${
+                                isSelected 
+                                ? `bg-${activeColor}-600 text-white border-${activeColor}-600` 
+                                : 'bg-white border-slate-300 text-slate-500'
+                            }">
+                                ${isBenar ? '<i data-lucide="thumbs-up" class="w-4 h-4"></i>' : '<i data-lucide="thumbs-down" class="w-4 h-4"></i>'}
+                            </span>
+                            <span class="text-sm font-bold text-slate-700">${opt}</span>
+                        </div>
+                        <span class="w-5 h-5 rounded-full border flex items-center justify-center ${
+                            isSelected ? `bg-${activeColor}-600 border-${activeColor}-600 text-white` : 'border-slate-300 bg-white'
+                        }">
+                            ${isSelected ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
+                        </span>
+                    `;
+                    optBtn.addEventListener('click', () => selectSingleAnswer(q.id, opt));
+                    optContainer.appendChild(optBtn);
+                });
+            } else if (q.type === "MCMA") {
+                const savedAnswers = userAnswers[q.id] || [];
+                q.options.forEach(opt => {
+                    const isSelected = savedAnswers.includes(opt.key);
+                    const optBtn = document.createElement('button');
+                    optBtn.className = `w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between ${
+                        isSelected 
+                        ? 'border-purple-600 bg-purple-50/50 ring-2 ring-purple-500 font-semibold' 
+                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    }`;
+                    optBtn.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border font-bold ${
+                                isSelected ? 'bg-purple-600 text-white border-purple-600' : 'bg-white border-slate-300 text-slate-500'
+                            }">${opt.key}</span>
+                            <span class="text-sm text-slate-700">${opt.text}</span>
+                        </div>
+                        <div class="w-5 h-5 rounded border flex items-center justify-center ${
+                            isSelected ? 'bg-purple-600 border-purple-600 text-white' : 'border-slate-300 bg-white'
+                        }">
+                            ${isSelected ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
+                        </div>
+                    `;
+                    optBtn.addEventListener('click', () => toggleMultipleAnswer(q.id, opt.key));
+                    optContainer.appendChild(optBtn);
+                });
+            }
+
+            // Sync Nav Buttons
+            document.getElementById('prevBtn').disabled = index === 0;
+            if(index === activeQuestions.length - 1) {
+                document.getElementById('nextBtn').innerHTML = `<span>Selesai</span> <i data-lucide="check" class="w-4 h-4"></i>`;
+            } else {
+                document.getElementById('nextBtn').innerHTML = `<span>Berikutnya</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+            }
+
+            // Update Map Grid Highlight
+            highlightNavGridButton(index);
+            lucide.createIcons();
+            
+            // Simpan posisi pengerjaan aktif setelah berpindah soal
+            sendHeartbeat();
+        }
+
+        // Simpan Jawaban Tunggal (PG / BS)
+        function selectSingleAnswer(qId, key) {
+            userAnswers[qId] = key;
+            updateAnsweredCounter();
+            updateNavigationGridButton(currentQuestionIndex, true);
+            sendHeartbeat();
+            
+            // Auto transition ke soal berikutnya setelah delay singkat demi UX mulus
+            setTimeout(() => {
+                if(currentQuestionIndex < activeQuestions.length - 1) {
+                    loadQuestion(currentQuestionIndex + 1);
+                }
+            }, 300);
+        }
+
+        // Simpan Jawaban Jamak (MCMA)
+        function toggleMultipleAnswer(qId, key) {
+            if(!userAnswers[qId]) {
+                userAnswers[qId] = [];
+            }
+
+            const idx = userAnswers[qId].indexOf(key);
+            if(idx > -1) {
+                userAnswers[qId].splice(idx, 1);
+            } else {
+                userAnswers[qId].push(key);
+            }
+
+            userAnswers[qId].sort();
+
+            const hasAnswer = userAnswers[qId].length > 0;
+            updateNavigationGridButton(currentQuestionIndex, hasAnswer);
+            updateAnsweredCounter();
+            sendHeartbeat();
+            loadQuestion(currentQuestionIndex); 
+        }
+
+        // Render Panel Navigasi Grid (1-40)
+        function renderNavigationGrid() {
+            const grid = document.getElementById('navGrid');
+            grid.innerHTML = "";
+
+            activeQuestions.forEach((q, i) => {
+                const btn = document.createElement('button');
+                btn.id = `navBtn-${i}`;
+                btn.className = "h-11 rounded-xl border text-sm font-semibold flex items-center justify-center transition-all bg-white text-slate-600 border-slate-200 hover:border-blue-300";
+                btn.innerText = i + 1;
+                btn.addEventListener('click', () => loadQuestion(i));
+                grid.appendChild(btn);
+            });
+        }
+
+        // Highlight Tombol Navigasi yang sedang aktif
+        function highlightNavGridButton(activeIdx) {
+            activeQuestions.forEach((q, i) => {
+                const btn = document.getElementById(`navBtn-${i}`);
+                if (!btn) return;
+
+                let classes = "h-11 rounded-xl border text-sm font-semibold flex items-center justify-center transition-all ";
+                const hasAnswer = checkIsAnswered(q);
+
+                if (i === activeIdx) {
+                    classes += "bg-blue-50 text-blue-700 border-blue-600 ring-2 ring-blue-500/30";
+                } else if (hasAnswer) {
+                    classes += "bg-blue-600 text-white border-blue-600 hover:bg-blue-700";
+                } else {
+                    classes += "bg-white text-slate-700 border-slate-200 hover:bg-slate-50";
+                }
+
+                btn.className = classes;
+            });
+        }
+
+        function updateNavigationGridButton(index, hasAnswer) {
+            const btn = document.getElementById(`navBtn-${index}`);
+            if(!btn) return;
+            if(hasAnswer) {
+                btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+            } else {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+            }
+        }
+
+        function checkIsAnswered(q) {
+            const ans = userAnswers[q.id];
+            if (!ans) return false;
+            if (q.type === "MCMA" && ans.length === 0) return false;
+            return true;
+        }
+
+        function updateAnsweredCounter() {
+            let count = 0;
+            activeQuestions.forEach(q => {
+                if(checkIsAnswered(q)) count++;
+            });
+            document.getElementById('answeredCount').innerText = count;
+        }
+
+        // Tombol Navigasi Manual
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentQuestionIndex < activeQuestions.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            } else {
+                triggerFinishConfirm();
+            }
+        });
+
+        document.getElementById('finishBtn').addEventListener('click', triggerFinishConfirm);
+
+        function triggerFinishConfirm() {
+            let unanswered = 0;
+            activeQuestions.forEach(q => {
+                if(!checkIsAnswered(q)) unanswered++;
+            });
+
+            const dialogTitle = document.getElementById('dialogTitle');
+            const dialogText = document.getElementById('dialogText');
+            
+            if(unanswered > 0) {
+                dialogTitle.innerText = "Peringatan: Ada Soal Kosong!";
+                dialogText.innerHTML = `Anda masih menyisakan <b class="text-rose-600">${unanswered} soal</b> yang belum diisi. Apakah Anda tetap ingin mengumpulkan hasil sekarang?`;
+            } else {
+                dialogTitle.innerText = "Konfirmasi Selesai Ujian";
+                dialogText.innerHTML = "Luar biasa! Semua soal telah terisi lengkap. Apakah Anda yakin ingin menyelesaikan dan mengirimkan jawaban Anda sekarang?";
+            }
+
+            document.getElementById('confirmDialog').classList.remove('hidden');
+        }
+
+        document.getElementById('cancelDialogBtn').addEventListener('click', () => {
+            document.getElementById('confirmDialog').classList.add('hidden');
+        });
+
+        document.getElementById('confirmDialogBtn').addEventListener('click', () => {
+            document.getElementById('confirmDialog').classList.add('hidden');
+            finishExam();
+        });
+
+        function autoSubmitExam() {
+            showToast("Waktu pengerjaan telah habis! Sistem mengirimkan jawaban Anda secara otomatis.");
+            finishExam();
+        }
+
+        // Selesai & Kalkulasi Nilai
+        function finishExam() {
+            clearInterval(timerInterval);
+            isExamFinished = true;
+
+            let correctCount = 0;
+            let wrongCount = 0;
+
+            activeQuestions.forEach(q => {
+                const userAns = userAnswers[q.id];
+                
+                if (q.type === "PG" || q.type === "BS") {
+                    if (userAns === q.correctAnswer) {
+                        correctCount++;
+                    } else {
+                        wrongCount++;
+                    }
+                } else if (q.type === "MCMA") {
+                    const correctSet = q.correctAnswers;
+                    const userSet = userAns || [];
+                    
+                    const isPerfect = correctSet.length === userSet.length && 
+                                      correctSet.every(v => userSet.includes(v));
+                    
+                    if(isPerfect) {
+                        correctCount++;
+                    } else {
+                        wrongCount++;
+                    }
+                }
+            });
+
+            const finalScore = Math.round((correctCount / activeQuestions.length) * 100);
+
+            // Tampilkan Hasil di UI
+            document.getElementById('resStudentName').innerText = studentName;
+            document.getElementById('resStudentClass').innerText = "Kelas " + studentClass;
+            document.getElementById('resScore').innerText = finalScore;
+            document.getElementById('resCorrect').innerText = correctCount;
+            document.getElementById('resWrong').innerText = wrongCount;
+
+            const timeUsed = 3600 - timeRemaining;
+            const minUsed = Math.floor(timeUsed / 60);
+            const secUsed = timeUsed % 60;
+            const formattedTime = `${String(minUsed).padStart(2, '0')}:${String(secUsed).padStart(2, '0')}`;
+            document.getElementById('resTime').innerText = formattedTime;
+
+            // SIMPAN HASIL KE RIWAYAT SELESAI
+            saveResultToStorage({
+                name: studentName,
+                class: studentClass,
+                package: currentPackage,
+                score: finalScore,
+                correct: correctCount,
+                wrong: wrongCount,
+                timeUsed: formattedTime,
+                timestamp: new Date().toLocaleString('id-ID'),
+                answers: JSON.parse(JSON.stringify(userAnswers)), 
+                packageQuestions: JSON.parse(JSON.stringify(activeQuestions)) 
+            });
+
+            // Hapus sesi aktif siswa dari database monitoring siswa aktif
+            clearActiveSession();
+
+            // Pindah Section
+            document.getElementById('examSection').classList.add('hidden');
+            document.getElementById('resultSection').classList.remove('hidden');
+
+            renderDetailedAnalysis();
+        }
+
+        function renderDetailedAnalysis() {
+            const container = document.getElementById('analysisCardsContainer');
+            container.innerHTML = "";
+
+            activeQuestions.forEach((q, i) => {
+                const userAns = userAnswers[q.id];
+                let isCorrect = false;
+                let userAnsText = "";
+                let correctAnsText = "";
+
+                if (q.type === "PG" || q.type === "BS") {
+                    isCorrect = userAns === q.correctAnswer;
+                    userAnsText = userAns ? `${userAns}` : "Tidak dijawab";
+                    correctAnsText = `${q.correctAnswer}`;
+                } else if (q.type === "MCMA") {
+                    const correctSet = q.correctAnswers;
+                    const userSet = userAns || [];
+                    isCorrect = correctSet.length === userSet.length && correctSet.every(v => userSet.includes(v));
+                    
+                    userAnsText = userSet.length > 0 ? userSet.join(", ") : "Tidak dijawab";
+                    correctAnsText = correctSet.join(", ");
+                }
+
+                const card = document.createElement('div');
+                card.className = `border rounded-2xl p-6 bg-white shadow-sm transition-all space-y-4 ${
+                    isCorrect ? 'border-emerald-200 ring-4 ring-emerald-500/5' : 'border-rose-200 ring-4 ring-rose-500/5'
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-8 h-8 rounded-lg ${isCorrect ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'} flex items-center justify-center font-bold text-sm">${i + 1}</span>
+                            <span class="text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-2 py-1 rounded">${q.topic}</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs">
+                            <span class="font-medium text-slate-400">Level: ${q.level}</span>
+                            <span class="px-2 py-0.5 rounded font-semibold ${
+                                isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                            }">${isCorrect ? 'BENAR' : 'SALAH'}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h4 class="text-sm font-semibold text-slate-800 leading-relaxed">${q.question}</h4>
+                        
+                        ${q.type === 'PG' ? `
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                                ${q.options.map(opt => {
+                                    const isChosen = opt.key === userAns;
+                                    const isKunci = opt.key === q.correctAnswer;
+                                    let borderStyle = "border-slate-100 bg-slate-50 text-slate-500";
+                                    if(isKunci) borderStyle = "border-emerald-300 bg-emerald-50/50 text-emerald-900 font-semibold";
+                                    else if(isChosen && !isCorrect) borderStyle = "border-rose-300 bg-rose-50 text-rose-900 font-semibold";
+
+                                    return `
+                                        <div class="p-2 border.5 rounded-lg text-xs flex items-center space-x-2 ${borderStyle}">
+                                            <span class="w-5 h-5 rounded flex-shrink-0 flex items-center justify-center border font-bold ${
+                                                isKunci ? 'bg-emerald-600 border-emerald-600 text-white' : (isChosen ? 'bg-rose-600 border-rose-600 text-white' : 'bg-white text-slate-400')
+                                            }">${opt.key}</span>
+                                            <span>${opt.text}</span>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 p-3 rounded-xl text-xs ${isCorrect ? 'bg-emerald-50/30 border border-emerald-100' : 'bg-rose-50/30 border border-rose-100'}">
+                        <div>
+                            <span class="text-slate-500 block">Jawaban Anda:</span>
+                            <span class="font-bold text-sm ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}">${userAnsText}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">Kunci Jawaban:</span>
+                            <span class="font-bold text-sm text-emerald-700">${correctAnsText}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 text-xs text-slate-700 space-y-1">
+                        <p class="font-bold text-blue-900 flex items-center">
+                            <i data-lucide="help-circle" class="w-3.5 h-3.5 mr-1.5 text-blue-600"></i>
+                            <span>Analisis & Penjelasan:</span>
+                        </p>
+                        <p class="leading-relaxed font-normal">${q.explanation}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Restart Aplikasi Ujian
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            document.getElementById('inputName').value = studentName;
+            document.getElementById('userInfoHeader').classList.add('hidden');
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        });
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 right-5 bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-lg shadow-lg z-50 animate-bounce";
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        function generateDefaultSVG() {}
+
+        // ==========================================
+        //         SISTEM ADMINISTRASI GURU
+        // ==========================================
+
+        const ADMIN_PASSWORD_HASH = "adminpjok"; 
+
+        function saveResultToStorage(result) {
+            let existingResults = JSON.parse(localStorage.getItem('pjok_exam_results')) || [];
+            existingResults.push(result);
+            localStorage.setItem('pjok_exam_results', JSON.stringify(existingResults));
+        }
+
+        function promptAdminAccess() {
+            document.getElementById('adminPasswordInput').value = "";
+            document.getElementById('adminPasswordError').classList.add('hidden');
+            document.getElementById('adminPasswordModal').classList.remove('hidden');
+            document.getElementById('adminPasswordInput').focus();
+        }
+
+        function closeAdminPasswordModal() {
+            document.getElementById('adminPasswordModal').classList.add('hidden');
+        }
+
+        function submitAdminPassword() {
+            const inputVal = document.getElementById('adminPasswordInput').value;
+            if (inputVal === ADMIN_PASSWORD_HASH) {
+                closeAdminPasswordModal();
+                openAdminPanel();
+            } else {
+                document.getElementById('adminPasswordError').classList.remove('hidden');
+            }
+        }
+
+        document.getElementById('adminPasswordInput').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                submitAdminPassword();
+            }
+        });
+
+        // Masuk ke Panel Dashboard Guru
+        function openAdminPanel() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('recoverySection').classList.add('hidden');
+            document.getElementById('examSection').classList.add('hidden');
+            document.getElementById('resultSection').classList.add('hidden');
+            
+            document.getElementById('adminSection').classList.remove('hidden');
+            closeStudentDetail(); 
+            switchAdminTab('monitoring'); // Default tab ke monitoring
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        }
+
+        // Beralih antar tab Menu Admin
+        function switchAdminTab(tabName) {
+            const tabMonBtn = document.getElementById('tabMonitoringBtn');
+            const tabResBtn = document.getElementById('tabResultsBtn');
+            const contentMon = document.getElementById('tabMonitoringContent');
+            const contentRes = document.getElementById('tabResultsContent');
+
+            if (tabName === 'monitoring') {
+                tabMonBtn.className = "px-6 py-3 text-sm font-bold border-b-2 border-blue-600 text-blue-600 flex items-center space-x-2";
+                tabResBtn.className = "px-6 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-2";
+                contentMon.classList.remove('hidden');
+                contentRes.classList.add('hidden');
+            } else {
+                tabResBtn.className = "px-6 py-3 text-sm font-bold border-b-2 border-blue-600 text-blue-600 flex items-center space-x-2";
+                tabMonBtn.className = "px-6 py-3 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-2";
+                contentRes.classList.remove('hidden');
+                contentMon.classList.add('hidden');
+            }
+            loadAdminData();
+        }
+
+        // Memuat & Me-render Semua Data Admin (Siswa Aktif & Nilai Riwayat)
+        function loadAdminData() {
+            loadMonitoringTab();
+            loadResultsTab();
+        }
+
+        // 1. Render Tab Monitoring Siswa Aktif
+        function loadMonitoringTab() {
+            const activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+            const tableBody = document.getElementById('monitoringTableBody');
+            const noDataEl = document.getElementById('noMonitoringData');
+            
+            tableBody.innerHTML = "";
+            const keys = Object.keys(activeSessions);
+
+            if (keys.length === 0) {
+                noDataEl.classList.remove('hidden');
+                document.getElementById('liveActiveCount').innerText = "0";
+                document.getElementById('liveDisconnectedCount').innerText = "0";
+                document.getElementById('liveResetRequestCount').innerText = "0";
+                document.getElementById('activeBadgeCount').classList.add('hidden');
+                return;
+            } else {
+                noDataEl.classList.add('hidden');
+            }
+
+            let activeCount = 0;
+            let disconCount = 0;
+            let resetReqCount = 0;
+
+            keys.forEach((key) => {
+                const s = activeSessions[key];
+                
+                // Deteksi koneksi terputus jika tidak mengirim detak jantung dalam 8 detik terakhir
+                const isOnline = (Date.now() - s.lastHeartbeat) < 8000;
+                
+                if (s.requestReset) {
+                    resetReqCount++;
+                } else if (isOnline) {
+                    activeCount++;
+                } else {
+                    disconCount++;
+                }
+
+                // Hitung progres bar
+                const progressPercent = Math.round((s.answeredCount / 40) * 100);
+
+                // Buat Status Badge
+                let statusBadge = "";
+                if (s.requestReset) {
+                    statusBadge = `<span class="inline-flex items-center px-2 py-1 text-xs font-bold rounded-full bg-rose-100 text-rose-800 animate-pulse border border-rose-200">
+                                      <span class="w-1.5 h-1.5 rounded-full bg-rose-600 mr-1.5"></span> Butuh Reset Sesi
+                                   </span>`;
+                } else if (isOnline) {
+                    statusBadge = `<span class="inline-flex items-center px-2 py-1 text-xs font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5 animate-ping"></span> Online
+                                   </span>`;
+                } else {
+                    statusBadge = `<span class="inline-flex items-center px-2 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-500 border border-slate-200">
+                                      <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span> Terputus
+                                   </span>`;
+                }
+
+                // Format Sisa Waktu
+                const min = Math.floor(s.timeRemaining / 60);
+                const sec = s.timeRemaining % 60;
+                const timeStr = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900 flex items-center space-x-2">
+                        <span>${s.name}</span>
+                        ${s.requestReset ? `<span class="text-xs text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200 animate-bounce">Minta Reset!</span>` : ""}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${s.class}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-semibold">Paket ${s.package}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-24 bg-slate-100 rounded-full h-2 overflow-hidden">
+                                <div class="bg-blue-600 h-full rounded-full transition-all" style="width: ${progressPercent}%"></div>
+                            </div>
+                            <span class="text-xs text-slate-600 font-bold">${s.answeredCount} / 40</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-700 font-semibold">${timeStr}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${statusBadge}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-xs font-semibold space-x-1.5">
+                        <button onclick="forceSubmitSession('${key}')" class="px-2.5 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg transition-all" title="Paksa Kumpulkan Jawaban Siswa">
+                            Paksa Kumpulkan
+                        </button>
+                        <button onclick="adminResetSession('${key}', '${s.name}')" class="px-2.5 py-1.5 bg-rose-500 text-white hover:bg-rose-600 rounded-lg shadow-sm transition-all" title="Hapus sesi agar siswa bisa login kembali">
+                            Setel Ulang (Reset)
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Set counter indikator
+            document.getElementById('liveActiveCount').innerText = activeCount;
+            document.getElementById('liveDisconnectedCount').innerText = disconCount;
+            document.getElementById('liveResetRequestCount').innerText = resetReqCount;
+
+            const badgeEl = document.getElementById('activeBadgeCount');
+            if (resetReqCount > 0) {
+                badgeEl.innerText = resetReqCount;
+                badgeEl.classList.remove('hidden');
+            } else {
+                badgeEl.classList.add('hidden');
+            }
+
+            lucide.createIcons();
+        }
+
+        // 2. Render Tab Hasil Selesai (Daftar Nilai)
+        function loadResultsTab() {
+            const results = JSON.parse(localStorage.getItem('pjok_exam_results')) || [];
+            const tableBody = document.getElementById('adminTableBody');
+            const noDataEl = document.getElementById('noAdminData');
+            
+            tableBody.innerHTML = "";
+
+            if (results.length === 0) {
+                noDataEl.classList.remove('hidden');
+                return;
+            } else {
+                noDataEl.classList.add('hidden');
+            }
+
+            results.slice().reverse().forEach((res, reversedIndex) => {
+                const originalIndex = results.length - 1 - reversedIndex;
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-medium">${reversedIndex + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">${res.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">${res.class}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-semibold">Paket ${res.package}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="text-emerald-600 font-semibold">${res.correct} B</span>
+                        <span class="text-slate-300">/</span>
+                        <span class="text-rose-500 font-semibold">${res.wrong} S</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="px-2.5 py-1 text-xs font-black rounded-lg ${
+                            res.score >= 75 ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'
+                        }">${res.score}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-xs text-slate-400 font-medium">${res.timestamp}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-xs font-semibold space-x-2">
+                        <button onclick="viewStudentDetail(${originalIndex})" class="px-2.5 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-all">Lihat Detail</button>
+                        <button onclick="deleteSingleRecord(${originalIndex})" class="px-2.5 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash" class="w-3.5 h-3.5"></i></button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        // AKSI ADMIN: Hapus Sesi Aktif Siswa (Setel Ulang / Reset)
+        function adminResetSession(sessionKey, sName) {
+            if (confirm(`Apakah Anda yakin ingin me-reset sesi ujian "${sName}"? Semua progres jawaban sementara milik siswa ini akan dihapus permanen agar mereka dapat masuk kembali dari awal.`)) {
+                let activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+                delete activeSessions[sessionKey];
+                localStorage.setItem('pjok_active_sessions', JSON.stringify(activeSessions));
+                loadAdminData();
+                showToast("Sesi aktif berhasil di-reset oleh Guru.");
+            }
+        }
+
+        // AKSI ADMIN: Paksa Kumpulkan Jawaban Siswa secara Jarak Jauh
+        function forceSubmitSession(sessionKey) {
+            if (confirm("Apakah Anda yakin ingin memaksa mengumpulkan ujian siswa ini sekarang? Jawaban sementara akan otomatis diproses menjadi nilai.")) {
+                let activeSessions = JSON.parse(localStorage.getItem('pjok_active_sessions')) || {};
+                if (activeSessions[sessionKey]) {
+                    activeSessions[sessionKey].forceSubmit = true;
+                    localStorage.setItem('pjok_active_sessions', JSON.stringify(activeSessions));
+                    loadAdminData();
+                    showToast("Sinyal pengumpulan paksa dikirim ke perangkat siswa.");
+                }
+            }
+        }
+
+        // Hapus Satu Baris Rekor
+        function deleteSingleRecord(index) {
+            if (confirm("Apakah Anda yakin ingin menghapus data nilai siswa ini? Tindakan ini tidak dapat dibatalkan.")) {
+                let results = JSON.parse(localStorage.getItem('pjok_exam_results')) || [];
+                results.splice(index, 1);
+                localStorage.setItem('pjok_exam_results', JSON.stringify(results));
+                loadAdminData();
+                closeStudentDetail();
+                showToast("Data siswa berhasil dihapus.");
+            }
+        }
+
+        // Hapus Seluruh Riwayat Nilai Selesai
+        function confirmClearAllRecords() {
+            if (confirm("PERINGATAN! Anda akan menghapus seluruh daftar nilai dan hasil pengerjaan semua siswa. Apakah Anda yakin?")) {
+                localStorage.removeItem('pjok_exam_results');
+                loadAdminData();
+                closeStudentDetail();
+                showToast("Seluruh riwayat pengerjaan kelas berhasil dikosongkan.");
+            }
+        }
+
+        // Ekspor Seluruh Nilai ke File Excel/CSV
+        function exportResultsCSV() {
+            const results = JSON.parse(localStorage.getItem('pjok_exam_results')) || [];
+            if (results.length === 0) {
+                showToast("Tidak ada data untuk diekspor!");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No,Nama Lengkap,Kelas,Paket Soal,Benar,Salah,Skor,Sisa Waktu Pengerjaan,Tanggal Menyelesaikan\n";
+
+            results.forEach((res, i) => {
+                const row = [
+                    i + 1,
+                    `"${res.name.replace(/"/g, '""')}"`,
+                    res.class,
+                    `Paket ${res.package}`,
+                    res.correct,
+                    res.wrong,
+                    res.score,
+                    res.timeUsed,
+                    res.timestamp
+                ].join(",");
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Daftar_Nilai_PJOK_Kelas_6_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("File nilai berhasil diekspor!");
+        }
+
+        // Lihat Detail Jawaban Per Siswa
+        function viewStudentDetail(index) {
+            const results = JSON.parse(localStorage.getItem('pjok_exam_results')) || [];
+            const studentData = results[index];
+            if (!studentData) return;
+
+            document.getElementById('detailStudentName').innerText = `${studentData.name} (${studentData.class})`;
+            const detailContainer = document.getElementById('adminStudentDetailContainer');
+            const cardsContainer = document.getElementById('adminDetailCards');
+            
+            detailContainer.classList.remove('hidden');
+            cardsContainer.innerHTML = "";
+
+            studentData.packageQuestions.forEach((q, i) => {
+                const userAns = studentData.answers[q.id];
+                let isCorrect = false;
+                let userAnsText = "";
+                let correctAnsText = "";
+
+                if (q.type === "PG" || q.type === "BS") {
+                    isCorrect = userAns === q.correctAnswer;
+                    userAnsText = userAns ? `${userAns}` : "Tidak dijawab";
+                    correctAnsText = `${q.correctAnswer}`;
+                } else if (q.type === "MCMA") {
+                    const correctSet = q.correctAnswers;
+                    const userSet = userAns || [];
+                    isCorrect = correctSet.length === userSet.length && correctSet.every(v => userSet.includes(v));
+                    
+                    userAnsText = userSet.length > 0 ? userSet.join(", ") : "Tidak dijawab";
+                    correctAnsText = correctSet.join(", ");
+                }
+
+                const card = document.createElement('div');
+                card.className = `p-4 border rounded-xl text-xs space-y-2 bg-slate-50 ${
+                    isCorrect ? 'border-emerald-200' : 'border-rose-200'
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center font-bold">
+                        <span>Soal No. ${i + 1} (${q.topic})</span>
+                        <span class="${isCorrect ? 'text-emerald-700 bg-emerald-100' : 'text-rose-700 bg-rose-100'} px-2 py-0.5 rounded text-[10px]">
+                            ${isCorrect ? 'BENAR' : 'SALAH'}
+                        </span>
+                    </div>
+                    <p class="text-slate-700 font-medium">${q.question}</p>
+                    <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
+                        <div>
+                            <span class="text-slate-400 block">Jawaban Siswa:</span>
+                            <span class="font-bold ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}">${userAnsText}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block">Kunci Jawaban:</span>
+                            <span class="font-bold text-emerald-700">${correctAnsText}</span>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50/50 p-2 border border-blue-100 rounded text-slate-600 text-[10px] leading-relaxed">
+                        <b>Pembahasan:</b> ${q.explanation}
+                    </div>
+                `;
+                cardsContainer.appendChild(card);
+            });
+
+            detailContainer.scrollIntoView({ behavior: 'smooth' });
+            lucide.createIcons();
+        }
+
+        function closeStudentDetail() {
+            document.getElementById('adminStudentDetailContainer').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
